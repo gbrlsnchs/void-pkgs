@@ -1,0 +1,22 @@
+stages:
+  - publish
+only:
+  refs:
+    - trunk
+  changes:
+    - srcpkgs/**/*
+
+.publish_template: &publish_template
+  stage: publish
+  image: ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-$VOID_BOOTSTRAP
+  script:
+    - xbps-install -Syu
+    - xbps-install git
+    - ./common/prepare.sh
+    - ./common/build.sh
+    - ./common/deploy.sh
+
+publish-x86_64:
+  variables:
+    VOID_BOOTSTRAP: x86_64
+  <<: *prepare_template
