@@ -2,7 +2,7 @@ pkgs=$(cat /tmp/pkgs)
 
 # Move packages to dist directory.
 repo_branch="pages"
-git switch $repo_branch || git switch -c $repo_branch
+git switch $repo_branch || git checkout --orphan $repo_branch
 
 libc=${LIBC:-"glibc"}
 mkdir -p $libc
