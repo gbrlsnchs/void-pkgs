@@ -64,9 +64,13 @@ cat << EOF >> $libc/index.html
 EOF
 
 # Commit changes.
-added_list=$(cat /tmp/added | sed "s/^/  * /")
-updated_list=$(cat /tmp/updated | sed "s/^/  * /")
-deleted_list=$(cat /tmp/deleted | sed "s/^/  * /")
+added_list=$(cat /tmp/added | sed --regexp-extended "s/(.+)/  * \1/")
+updated_list=$(cat /tmp/updated | sed --regexp-extended "s/(.+)/  * \1/")
+deleted_list=$(cat /tmp/deleted | sed --regexp-extended "s/(.+)/  * \1/")
+
+added_list=${added_list:-"  (Nothing)"}
+updated_list=${updated_list:-"  (Nothing)"}
+deleted_list=${deleted_list:-"  (Nothing)"}
 
 git add --all --force .
 git commit --file - << EOF
