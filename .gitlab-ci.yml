@@ -13,10 +13,6 @@ variables:
   PKGS_PATH: /tmp/pkgs
   UPSTREAM_PATH: /tmp/upstream
 
-pages:
-  artifacts:
-    - public
-
 .publish_template:
   stage: build
   rules:
@@ -39,5 +35,9 @@ pages:
   artifacts:
     - public
 
-
 include: common/*.yml
+
+pages:
+  stage: publish
+  artifacts:
+    - public
