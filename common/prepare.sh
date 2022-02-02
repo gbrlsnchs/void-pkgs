@@ -4,7 +4,7 @@ for file in $ADDED_PATH $MODIFIED_PATH $DELETED_PATH; do
 done
 
 # Update _all_ packages when there are CI changes.
-if [ $IS_CI_UPDATE == "true" ]; then
+if [ "$IS_CI_UPDATE" == "true" ]; then
 	echo "Preparing all packages to get rebuilt"
 	ls -1 srcpkgs > "$MODIFIED_PATH"
 	exit 0
