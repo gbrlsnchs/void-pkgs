@@ -1,6 +1,7 @@
 # Move packages to dist directory.
 repo_branch="pages"
-git checkout $repo_branch
+git fetch
+git checkout $repo_branch || exit 1
 
 case "$ARCH" in
     *musl* ) libc="musl" ;;
