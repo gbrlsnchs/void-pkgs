@@ -1,7 +1,7 @@
 # Move packages to dist directory.
 repo_branch="pages"
 git switch $repo_branch || git checkout --orphan $repo_branch || exit 1
-git rm --cached -r .
+rm --recursive --force $(git ls-files --cached)
 
 case "$ARCH" in
     *musl* ) libc="musl" ;;
