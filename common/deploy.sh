@@ -7,7 +7,7 @@ git switch $repo_branch || git checkout --orphan $repo_branch
 libc=${LIBC:-"glibc"}
 mkdir -p $libc
 
-for pkg in $(cat /tmp/added /tmp/updated /tmp/removed); do
+for pkg in $(cat /tmp/added /tmp/modified /tmp/deleted); do
 	rm $libc/$pkg*
 done
 
@@ -65,11 +65,11 @@ EOF
 
 # Commit changes.
 added_list=$(cat /tmp/added | sed --regexp-extended "s/(.+)/  * \1/")
-updated_list=$(cat /tmp/updated | sed --regexp-extended "s/(.+)/  * \1/")
+modified_list=$(cat /tmp/modified | sed --regexp-extended "s/(.+)/  * \1/")
 deleted_list=$(cat /tmp/deleted | sed --regexp-extended "s/(.+)/  * \1/")
 
 added_list=${added_list:-"  (Nothing)"}
-updated_list=${updated_list:-"  (Nothing)"}
+modified_list=${modified_list:-"  (Nothing)"}
 deleted_list=${deleted_list:-"  (Nothing)"}
 
 git config --global user.name "GitLab CI (job #$CI_JOB_ID)"
@@ -82,7 +82,7 @@ Added packages:
 $added_list
 
 Updated packages:
-$updated_list
+$modified_list
 
 Deleted packages:
 $deleted_list
