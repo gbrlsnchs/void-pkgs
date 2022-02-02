@@ -39,5 +39,7 @@ include: common/*.yml
 
 pages:
   stage: publish
+  script:
+    - echo "Publishing!"
   artifacts:
     - public
