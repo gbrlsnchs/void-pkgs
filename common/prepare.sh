@@ -5,7 +5,7 @@ filter_deleted="D"
 for action in added modified deleted; do
 	echo "Packages to be $action":
 
-	local filter="filter_$action"
+	filter="filter_$action"
 	git diff-tree \
 		-r \
 		--name-only \
