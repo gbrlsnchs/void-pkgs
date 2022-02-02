@@ -40,6 +40,11 @@ include: common/*.yml
 
 pages:
   stage: publish
+  rules:
+    - changes:
+        - srcpkgs/**/*
+        - .gitlab-ci.yml
+        - common/**/*
   script:
     - echo "Publishing!"
   artifacts:
