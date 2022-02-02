@@ -103,5 +103,5 @@ EOF
 git remote set-url origin "$CI_REPOSITORY_URL"
 
 echo "Pushing to $(git remote get-url origin)..."
-git push --set-upstream --force --quiet $repo_branch || exit 1
+git push --set-upstream --force --quiet origin $repo_branch || exit 1
 echo "Done!!!"
