@@ -1,13 +1,13 @@
 stages:
   - publish
-only:
-  refs:
-    - trunk
-  changes:
-    - srcpkgs/**/*
 
 .publish_template: &publish_template
   stage: publish
+  only:
+    refs:
+      - trunk
+    changes:
+      - srcpkgs/**/*
   image: ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-$VOID_BOOTSTRAP
   script:
     - xbps-install -Syu
