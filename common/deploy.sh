@@ -12,6 +12,11 @@ for pkg in $(cat "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH"); do
 	rm --force "$libc/$pkg"*
 done
 
+if [ pkg == "" ]; then
+	echo "No packages to deploy!"
+	exit 0
+fi
+
 binpkgs="$dir/hostdir/binpkgs/$pkg"
 cp --recursive --force "$binpkgs"/* "$libc"
 
