@@ -42,13 +42,15 @@ cat << EOF > public/index.html
 <ul>
 EOF
 for lib in public/*; do
-	if [ "$lib" == "index.html" ]; then
+	path=$(basename $lib)
+
+	if [ "$path" == "index.html" ]; then
 		continue
 	fi
 
 	last_update=$(stat -c %y "$lib")
 
-	printf '<li><a href="%s">%s</a> [%s]</li>' "$lib" "$lib" "$last_update" >> public/index.html
+	printf '<li><a href="%s">%s</a> [%s]</li>' "$path" "$path" "$last_update" >> public/index.html
 done
 cat << EOF >> public/index.html
 </ul>
@@ -64,14 +66,16 @@ cat << EOF > "public/$libc/index.html"
 <ul>
 EOF
 for file in "public/$libc"/*.xbps; do
-	if [ "$lib" == "index.html" ]; then
+	path=$(basename $file)
+	if [ "$path" == "index.html" ]; then
 		continue
 	fi
 
 	last_update=$(stat -c %y "$file")
-	sig_file="$file.sig"
+	sig_file="$libc/$path.sig"
+	path="$libc/$path"
 
-	printf '<li><a href="%s">%s</a> [%s] (<a href="%s">signature</a>)</li>' "$file" "$file" "$last_update" "$sig_file" >> "public/$libc/index.html"
+	printf '<li><a href="%s">%s</a> [%s] (<a href="%s">signature</a>)</li>' "$path" "$path" "$last_update" "$sig_file" >> "public/$libc/index.html"
 done
 cat << EOF >> "public/$libc/index.html"
 </ul>
