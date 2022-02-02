@@ -38,7 +38,8 @@ fi
 # building other packages.
 eligible_pkgs=$(ls -1 srcpkgs | grep --invert-match --file /tmp/deleted)
 echo "The following packages will be added/updated:"
-echo ${eligible_pkgs | sed --regexp-extended "s/(.+)/  * \1/":-"  (Nothing)"}
+echo "$eligible_pkgs" | sed "s/^/  * /"
+
 for pkg in $eligible_pkgs; do
 	cp --no-target-directory --recursive srcpkgs/$pkg $dir/$pkg
 done
