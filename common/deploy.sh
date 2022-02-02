@@ -12,7 +12,7 @@ for pkg in $(cat "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH"); do
 	rm --force "$libc/$pkg"*
 done
 
-if [ pkg == "" ]; then
+if [ "$pkg" == "" ]; then
 	echo "No packages to deploy!"
 	exit 0
 fi
