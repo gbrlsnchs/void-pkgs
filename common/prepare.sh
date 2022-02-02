@@ -15,7 +15,7 @@ for action in added modified deleted; do
 		--name-only \
 		--no-rename \
 		--diff-filter=${!filter} \
-		HEAD HEAD~ \
+		HEAD~ HEAD \
 		"srcpkgs/*" \
 		| cut -d / -f 2 \
 		| tee $file \
