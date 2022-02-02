@@ -72,8 +72,7 @@ for file in "public/$libc"/*.xbps; do
 	fi
 
 	last_update=$(stat -c %y "$file")
-	sig_file="$libc/$path.sig"
-	path="$libc/$path"
+	sig_file="$path.sig"
 
 	printf '<li><a href="%s">%s</a> [%s] (<a href="%s">signature</a>)</li>' "$path" "$path" "$last_update" "$sig_file" >> "public/$libc/index.html"
 done
