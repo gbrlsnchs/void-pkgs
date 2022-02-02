@@ -1,6 +1,7 @@
 # Move packages to dist directory.
 repo_branch="pages"
 git switch $repo_branch || git checkout --orphan $repo_branch || exit 1
+git rm --cached -r .
 
 case "$ARCH" in
     *musl* ) libc="musl" ;;
@@ -97,7 +98,6 @@ deleted_list=${deleted_list:-"  (Nothing)"}
 
 git config --global user.name "GitLab CI (job #$CI_JOB_ID)"
 git config --global user.email "$GITLAB_USER_EMAIL"
-git rm --cached -r .
 git add index.html $libc
 git commit --file - << EOF
 Update packages for $libc
