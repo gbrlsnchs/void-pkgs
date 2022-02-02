@@ -1,24 +1,5 @@
-.publish_template: &publish_template
-  stage: publish
-  rules:
-    - changes:
-        - srcpkgs/**/*
-        - .gitlab-ci.yml
-        - common/$ARCH.yml
-        - common/*.sh
-      variables:
-        IS_CI_UPDATE: "true"
-  resource_group: publishing
-  image: ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-$VOID_BOOTSTRAP
-  script:
-    - xbps-install --sync --update --yes
-    - xbps-install --yes git
-    - ./common/prepare.sh
-    - ./common/build.sh
-    - ./common/deploy.sh
-
 publish-x86_64:
   variables:
     ARCH: x86_64
     VOID_BOOTSTRAP: x86_64
-  <<: *publish_template
+  extends: .publish_template
