@@ -85,7 +85,7 @@ mkdir -p $ssh_dir
 echo "$PRIVATE_PEM" | base64 --decode > "$ssh_dir/id_rsa"
 
 xbps-rindex --add "$libc"/*.xbps
-xbps-rindex --sign --signedby "$AUTHOR" "$libc"
+xbps-rindex --sign --signedby "$GITLAB_USER_NAME" "$libc"
 for pkg in $pkgs; do
 	xbps-rindex --sign-pkg "$libc"/pkg*.xbps
 done
@@ -93,7 +93,7 @@ done
 # Generate HTML.
 cat << EOF > index.html
 <html>
-<head><title>$AUTHOR's custom Void packages</title></head>
+<head><title>$GITLAB_USER_NAME's custom Void packages</title></head>
 <body>
 <h1>Available C libraries</h1>
 <ul>
@@ -111,7 +111,7 @@ EOF
 
 cat << EOF > "$libc/index.html"
 <html>
-<head><title>$AUTHOR's custom Void packages - $libc</title></head>
+<head><title>$GITLAB_USER_NAME's custom Void packages - $libc</title></head>
 <body>
 <h1>Available packages for $libc</h1>
 <ul>
