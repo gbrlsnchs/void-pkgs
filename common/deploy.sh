@@ -99,4 +99,7 @@ $modified_list
 Deleted packages:
 $deleted_list
 EOF
+
+echo "Pushing to $CI_REPOSITORY_URL..."
 git push --force --quiet "$CI_REPOSITORY_URL" $repo_branch || exit 1
+echo "Done!!!"
