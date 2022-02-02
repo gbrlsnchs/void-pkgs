@@ -24,14 +24,12 @@ binpkgs="$UPSTREAM_PATH/hostdir/binpkgs"
 cp --recursive --force "$binpkgs"/* "$libc"
 
 # Sign packages.
-ssh_dir=$HOME/.ssh
-mkdir -p $ssh_dir
-echo "$PRIVATE_PEM" | base64 --decode > "$ssh_dir/id_rsa"
+echo "$PRIVATE_PEM" | base64 --decode > /tmp/privkey
 
 xbps-rindex --add --force "$libc"/*."$ARCH".xbps || exit 1
-xbps-rindex --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
+xbps-rindex --privkey /tmp/privkey --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
 for pkg in $pkgs; do
-	xbps-rindex --sign-pkg --force "$libc"/pkg*."$ARCH".xbps || exit 1
+	xbps-rindex --privkey /tmp/privkey --sign-pkg --force "$libc"/pkg*."$ARCH".xbps || exit 1
 done
 
 # Generate HTML.
