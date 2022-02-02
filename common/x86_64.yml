@@ -7,7 +7,7 @@
         - common/$ARCH.yml
         - common/*.sh
       variables:
-        IS_CI_UPDATE: true
+        IS_CI_UPDATE: "true"
   resource_group: publishing
   image: ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-$VOID_BOOTSTRAP
   script:
