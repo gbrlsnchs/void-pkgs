@@ -42,6 +42,10 @@ cat << EOF > public/index.html
 <ul>
 EOF
 for lib in public/*; do
+	if [ "$lib" == "index.html" ]; then
+		continue
+	fi
+
 	last_update=$(stat -c %y "$lib")
 
 	printf '<li><a href="%s">%s</a> [%s]</li>' "$lib" "$lib" "$last_update" >> public/index.html
@@ -60,6 +64,10 @@ cat << EOF > "public/$libc/index.html"
 <ul>
 EOF
 for file in "public/$libc"/*.xbps; do
+	if [ "$lib" == "index.html" ]; then
+		continue
+	fi
+
 	last_update=$(stat -c %y "$file")
 	sig_file="$file.sig"
 
