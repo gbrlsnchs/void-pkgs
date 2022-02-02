@@ -6,6 +6,8 @@ for action in added modified deleted; do
 	echo "Packages to be $action":
 
 	file=/tmp/$action
+	touch $file
+
 	filter="filter_$action"
 	git diff-tree \
 		-r \
