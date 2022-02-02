@@ -9,9 +9,6 @@ for action in added modified deleted; do
 	touch $file
 
 	filter="filter_$action"
-	filter=${!filter}
-
-	echo "Filtering packages with --diff-filter=$filter"
 
 	git diff-tree \
 		-r \
@@ -19,7 +16,7 @@ for action in added modified deleted; do
 		--no-rename \
 		--diff-filter=${!filter} \
 		HEAD HEAD~ \
-		"srcpkgs/*/template" \
+		"srcpkgs/*" \
 		| cut -d / -f 2 \
 		| tee $file \
 		| sed "s/^/  * /" >&2
