@@ -50,7 +50,7 @@ echo "$eligible_pkgs" | sed "s/^/  * /"
 
 for pkg in $eligible_pkgs; do
 	src="srcpkgs/$pkg"
-	dst="$dir/$pkg"
+	dst="$dir/$src"
 
 	echo "Copying $src to $dst"
 	cp --no-target-directory --recursive --force "$src" "$dst"
