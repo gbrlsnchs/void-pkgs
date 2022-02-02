@@ -8,16 +8,19 @@ case "$ARCH" in
 esac
 mkdir -p "$libc"
 
-for pkg in $(cat "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH"); do
-	rm --force "$libc/$pkg"*
+# Delete files related to the package in the current architecture.
+for pkg in $(cat "$DELETED_PATH"); do
+	rm --force "$libc/$pkg"-[0-9]*_[0-9]*."$ARCH".*
 done
+
+pkg=$(cat $ADDED_PATH $MODIFIED_PATH)
 
 if [ "$pkg" == "" ]; then
 	echo "No packages to deploy!"
 	exit 0
 fi
 
-binpkgs="$UPSTREAM_PACKAGES_PATH/hostdir/binpkgs/$pkg"
+binpkgs="$UPSTREAM_PATH/hostdir/binpkgs/$pkg"
 cp --recursive --force "$binpkgs"/* "$libc"
 
 # Sign packages.
@@ -26,10 +29,10 @@ mkdir -p $ssh_dir
 echo "$PRIVATE_PEM" | base64 --decode > "$ssh_dir/id_rsa"
 
 rm --force "$libc/$ARCH-repodata"
-xbps-rindex --add "$libc"/*.xbps || exit 1
+xbps-rindex --add "$libc"/*."$ARCH".xbps || exit 1
 xbps-rindex --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
 for pkg in $pkgs; do
-	xbps-rindex --sign-pkg "$libc"/pkg*.xbps || exit 1
+	xbps-rindex --sign-pkg "$libc"/pkg*."$ARCH".xbps || exit 1
 done
 
 # Generate HTML.
