@@ -100,6 +100,8 @@ Deleted packages:
 $deleted_list
 EOF
 
-echo "Pushing to $CI_REPOSITORY_URL..."
-git push --force --quiet "$CI_REPOSITORY_URL" $repo_branch || exit 1
+git remote set-url origin "$CI_REPOSITORY_URL"
+
+echo "Pushing to $(git remote get-url origin)..."
+git push --force --quiet $repo_branch || exit 1
 echo "Done!!!"
