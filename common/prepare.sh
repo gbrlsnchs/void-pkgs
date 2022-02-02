@@ -9,6 +9,10 @@ for action in added modified deleted; do
 	touch $file
 
 	filter="filter_$action"
+	filter=${!filter}
+
+	echo "Filtering packages with --diff-filter=$filter"
+
 	git diff-tree \
 		-r \
 		--name-only \
@@ -37,7 +41,7 @@ fi
 # building other packages.
 eligible_pkgs=$(ls -1 srcpkgs | grep --invert-match --file /tmp/deleted)
 echo "The following packages will be added/updated:"
-echo $eligible_pkgs | sed "s/^/  * /"
+echo ${eligible_pkgs | sed --regexp-extended "s/(.+)/  * \1/":-"  (Nothing)"}
 for pkg in $eligible_pkgs; do
 	cp --no-target-directory --recursive srcpkgs/$pkg $dir/$pkg
 done
