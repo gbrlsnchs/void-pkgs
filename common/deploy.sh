@@ -17,7 +17,7 @@ if [ "$pkg" == "" ]; then
 	exit 0
 fi
 
-binpkgs="$dir/hostdir/binpkgs/$pkg"
+binpkgs="$UPSTREAM_PACKAGES_PATH/hostdir/binpkgs/$pkg"
 cp --recursive --force "$binpkgs"/* "$libc"
 
 # Sign packages.
@@ -25,6 +25,7 @@ ssh_dir=$HOME/.ssh
 mkdir -p $ssh_dir
 echo "$PRIVATE_PEM" | base64 --decode > "$ssh_dir/id_rsa"
 
+rm --force "$libc/$ARCH-repodata"
 xbps-rindex --add "$libc"/*.xbps || exit 1
 xbps-rindex --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
 for pkg in $pkgs; do

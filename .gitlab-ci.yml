@@ -10,6 +10,7 @@ variables:
   MODIFIED_PATH: /tmp/modified
   DELETED_PATH: /tmp/deleted
   PKGS_PATH: /tmp/pkgs
+  UPSTREAM_PACKAGES_PATH: upstream-packages
 
 .publish_template:
   stage: publish
