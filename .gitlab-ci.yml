@@ -10,8 +10,8 @@ stages:
       - srcpkgs/**/*
   image: ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-$VOID_BOOTSTRAP
   script:
-    - xbps-install -Syu
-    - xbps-install git
+    - xbps-install --sync --update --yes
+    - xbps-install --yes git
     - ./common/prepare.sh
     - ./common/build.sh
     - ./common/deploy.sh
