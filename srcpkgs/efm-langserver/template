@@ -1,0 +1,12 @@
+# Template file for 'efm-langserver'
+pkgname=efm-langserver
+version=0.0.27
+revision=1
+build_style=go
+go_import_path="github.com/mattn/efm-langserver"
+short_desc="General purpose Language Server"
+maintainer="Gabriel Sanches <gabriel@gsr.dev>"
+license="custom:Unknown"
+homepage="https://github.com/mattn/efm-langserver"
+distfiles="https://${go_import_path}/archive/v${version}.tar.gz"
+checksum=24cfb9660f13aeca1a0f90f985cc3b2c48c43636f7b90d2a9c199258dd2499a1
