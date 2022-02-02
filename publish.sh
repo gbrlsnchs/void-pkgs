@@ -49,7 +49,11 @@ echo "The following packages will be added/updated:"
 echo "$eligible_pkgs" | sed "s/^/  * /"
 
 for pkg in $eligible_pkgs; do
-	cp --no-target-directory --recursive "srcpkgs/$pkg" "$dir/$pkg"
+	src="srcpkgs/$pkg"
+	dst="$dir/$pkg"
+
+	echo "Copying $src to $dst"
+	cp --no-target-directory --recursive --force "$src" "$dst"
 done
 # Prepare system for ethereal chroot.
 echo XBPS_CHROOT_CMD=ethereal >> "$dir/etc/conf"
@@ -61,13 +65,13 @@ pkgs=$(cat "/tmp/$added_label" "/tmp/$modified_label")
 build_pkgs=$("$dir/xbps-src" sort-dependencies "$pkgs")
 for pkg in $build_pkgs; do
 	echo "Building package $pkg..."
-	"$dir"/xbps-src -j"$(nproc)" pkg "$pkg"
+	"$dir"/xbps-src -j"$(nproc)" pkg "$pkg" || exit 1
 	echo "Finished building package $pkg!"
 done
 
 # Move packages to dist directory.
 repo_branch="pages"
-git switch $repo_branch || git checkout --orphan $repo_branch
+git switch $repo_branch || git checkout --orphan $repo_branch || exit 1
 
 libc=${LIBC:-"glibc"}
 mkdir -p "$libc"
@@ -84,10 +88,10 @@ ssh_dir=$HOME/.ssh
 mkdir -p $ssh_dir
 echo "$PRIVATE_PEM" | base64 --decode > "$ssh_dir/id_rsa"
 
-xbps-rindex --add "$libc"/*.xbps
-xbps-rindex --sign --signedby "$GITLAB_USER_NAME" "$libc"
+xbps-rindex --add "$libc"/*.xbps || exit 1
+xbps-rindex --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
 for pkg in $pkgs; do
-	xbps-rindex --sign-pkg "$libc"/pkg*.xbps
+	xbps-rindex --sign-pkg "$libc"/pkg*.xbps || exit 1
 done
 
 # Generate HTML.
@@ -152,4 +156,4 @@ $modified_list
 Deleted packages:
 $deleted_list
 EOF
-git push --force --quiet "$CI_REPOSITORY_URL" $repo_branch
+git push --force --quiet "$CI_REPOSITORY_URL" $repo_branch || exit 1
