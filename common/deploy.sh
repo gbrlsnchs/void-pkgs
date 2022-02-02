@@ -72,6 +72,7 @@ added_list=${added_list:-"  (Nothing)"}
 updated_list=${updated_list:-"  (Nothing)"}
 deleted_list=${deleted_list:-"  (Nothing)"}
 
+git config user.name "GitLab CI (job #$CI_JOB_ID)" user.email "$GITLAB_USER_EMAIL"
 git add --all --force .
 git commit --file - << EOF
 Update packages for $libc
@@ -85,4 +86,4 @@ $updated_list
 Deleted packages:
 $deleted_list
 EOF
-git push --force --quiet $repo_branch > /dev/null
+git push --force --quiet "https://$CI_REPOSITORY_URL" $repo_branch
