@@ -5,6 +5,7 @@ filter_deleted="D"
 for action in added modified deleted; do
 	echo "Packages to be $action":
 
+	file=/tmp/$action
 	filter="filter_$action"
 	git diff-tree \
 		-r \
@@ -14,7 +15,7 @@ for action in added modified deleted; do
 		HEAD HEAD~ \
 		"srcpkgs/*/template" \
 		| cut -d / -f 2 \
-		| tee /tmp/added \
+		| tee $file \
 		| sed "s/^/  * /" >&2
 done
 
