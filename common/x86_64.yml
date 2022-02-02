@@ -1,0 +1,5 @@
+publish-x86_64:
+  variables:
+    ARCH: x86_64
+    VOID_BOOTSTRAP: x86_64
+  <<: *publish_template

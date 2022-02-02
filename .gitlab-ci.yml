@@ -1,20 +1,33 @@
 stages:
   - publish
 
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+variables:
+  ADDED_PATH: /tmp/added
+  MODIFIED_PATH: /tmp/modified
+  DELETED_PATH: /tmp/deleted
+  PKGS_PATH: /tmp/pkgs
+
 .publish_template: &publish_template
   stage: publish
-  only:
-    refs:
-      - trunk
-    changes:
-      - srcpkgs/**/*
+  rules:
+    - changes:
+        - srcpkgs/**/*
+        - .gitlab-ci.yml
+        - common/$ARCH.yml
+        - common/*.sh
+      variables:
+        IS_CI_UPDATE: true
+  resource_group: publishing
   image: ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-$VOID_BOOTSTRAP
   script:
     - xbps-install --sync --update --yes
     - xbps-install --yes git
-    - ./publish.sh
+    - ./common/prepare.sh
+    - ./common/build.sh
+    - ./common/deploy.sh
 
-publish-x86_64:
-  variables:
-    VOID_BOOTSTRAP: x86_64
-  <<: *publish_template
+include: common/*.yml
