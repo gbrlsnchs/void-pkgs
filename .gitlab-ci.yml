@@ -33,7 +33,8 @@ variables:
     - ./common/build.sh
     - ./common/deploy.sh
   artifacts:
-    - public
+    paths:
+      - public
 
 include: common/*.yml
 
@@ -42,4 +43,5 @@ pages:
   script:
     - echo "Publishing!"
   artifacts:
-    - public
+    paths:
+      - public
