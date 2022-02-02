@@ -1,4 +1,5 @@
 stages:
+  - build
   - publish
 
 workflow:
@@ -12,8 +13,12 @@ variables:
   PKGS_PATH: /tmp/pkgs
   UPSTREAM_PATH: /tmp/upstream
 
+pages:
+  artifacts:
+    - public
+
 .publish_template:
-  stage: publish
+  stage: build
   rules:
     - changes:
         - srcpkgs/**/*
@@ -31,6 +36,8 @@ variables:
     - ./common/prepare.sh
     - ./common/build.sh
     - ./common/deploy.sh
+  artifacts:
+    - public
 
 
 include: common/*.yml
