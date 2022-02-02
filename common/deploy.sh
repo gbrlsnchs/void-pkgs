@@ -28,11 +28,10 @@ ssh_dir=$HOME/.ssh
 mkdir -p $ssh_dir
 echo "$PRIVATE_PEM" | base64 --decode > "$ssh_dir/id_rsa"
 
-rm --force "$libc/$ARCH-repodata"
-xbps-rindex --add "$libc"/*."$ARCH".xbps || exit 1
+xbps-rindex --add --force "$libc"/*."$ARCH".xbps || exit 1
 xbps-rindex --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
 for pkg in $pkgs; do
-	xbps-rindex --sign-pkg "$libc"/pkg*."$ARCH".xbps || exit 1
+	xbps-rindex --sign-pkg --force "$libc"/pkg*."$ARCH".xbps || exit 1
 done
 
 # Generate HTML.
