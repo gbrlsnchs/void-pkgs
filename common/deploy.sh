@@ -20,7 +20,7 @@ if [ "$pkg" == "" ]; then
 	exit 0
 fi
 
-binpkgs="$UPSTREAM_PATH/hostdir/binpkgs/$pkg"
+binpkgs="$UPSTREAM_PATH/hostdir/binpkgs"
 cp --recursive --force "$binpkgs"/* "$libc"
 
 # Sign packages.
