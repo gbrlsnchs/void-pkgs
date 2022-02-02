@@ -12,9 +12,7 @@ stages:
   script:
     - xbps-install --sync --update --yes
     - xbps-install --yes git
-    - ./common/prepare.sh
-    - ./common/build.sh
-    - ./common/deploy.sh
+    - ./publish.sh
 
 publish-x86_64:
   variables:
