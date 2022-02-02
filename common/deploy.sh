@@ -24,6 +24,11 @@ binpkgs="$UPSTREAM_PATH/hostdir/binpkgs"
 cp --recursive --force "$binpkgs"/* "$libc"
 
 # Sign packages.
+if [ "$PRIVATE_PEM" == "" ]; then
+	echo "Missing private key!"
+	exit 1
+fi
+
 echo "$PRIVATE_PEM" | base64 --decode > /tmp/privkey
 
 xbps-rindex --add --force "$libc"/*."$ARCH".xbps || exit 1
