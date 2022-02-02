@@ -19,4 +19,4 @@ only:
 publish-x86_64:
   variables:
     VOID_BOOTSTRAP: x86_64
-  <<: *prepare_template
+  <<: *publish_template
