@@ -44,7 +44,7 @@ EOF
 for lib in public/*; do
 	last_update=$(stat -c %y "$lib")
 
-	printf '<li><a href="%s">%s</a> [%s]</li>' "$lib" "$lib" "$last_update" >> index.html
+	printf '<li><a href="%s">%s</a> [%s]</li>' "$lib" "$lib" "$last_update" >> public/index.html
 done
 cat << EOF >> public/index.html
 </ul>
@@ -63,7 +63,7 @@ for file in "public/$libc"/*.xbps; do
 	last_update=$(stat -c %y "$file")
 	sig_file="$file.sig"
 
-	printf '<li><a href="%s">%s</a> [%s] (<a href="%s">signature</a>)</li>' "$file" "$file" "$last_update" "$sig_file" >> "$libc/index.html"
+	printf '<li><a href="%s">%s</a> [%s] (<a href="%s">signature</a>)</li>' "$file" "$file" "$last_update" "$sig_file" >> "public/$libc/index.html"
 done
 cat << EOF >> "public/$libc/index.html"
 </ul>
