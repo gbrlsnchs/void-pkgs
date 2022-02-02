@@ -100,7 +100,7 @@ Deleted packages:
 $deleted_list
 EOF
 
-git remote set-url origin "https://${GITLAB_USER_EMAIL}:${ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git"
+git remote set-url origin "https://${GITLAB_USER_LOGIN}:${ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git"
 
 echo "Pushing to $(git remote get-url origin)..."
 git push --set-upstream --force --quiet origin $repo_branch || exit 1
