@@ -13,7 +13,7 @@ variables:
   PKGS_PATH: /tmp/pkgs
   UPSTREAM_PATH: /tmp/upstream
 
-.publish_template:
+.build_template:
   stage: build
   rules:
     - changes:
