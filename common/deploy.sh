@@ -97,6 +97,7 @@ deleted_list=${deleted_list:-"  (Nothing)"}
 
 git config --global user.name "GitLab CI (job #$CI_JOB_ID)"
 git config --global user.email "$GITLAB_USER_EMAIL"
+git rm --cached -r .
 git add index.html $libc
 git commit --file - << EOF
 Update packages for $libc
