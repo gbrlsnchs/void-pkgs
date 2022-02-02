@@ -152,4 +152,4 @@ $modified_list
 Deleted packages:
 $deleted_list
 EOF
-git push --force --quiet "https://$CI_REPOSITORY_URL" $repo_branch
+git push --force --quiet "$CI_REPOSITORY_URL" $repo_branch
