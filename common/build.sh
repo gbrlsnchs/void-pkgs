@@ -33,6 +33,10 @@ pkgs=$(cat "$ADDED_PATH" "$MODIFIED_PATH")
 build_pkgs=$("$dir/xbps-src" sort-dependencies "$pkgs")
 for pkg in $build_pkgs; do
 	echo "Building package $pkg..."
-	"$dir"/xbps-src -a "$ARCH" -j "$(nproc)" pkg "$pkg" || exit 1
+	if [ "$CROSS_COMPILE" == "true" ]; then
+		"$dir"/xbps-src -a "$ARCH" -j "$(nproc)" pkg "$pkg" || exit 1
+	else
+		"$dir"/xbps-src -j "$(nproc)" pkg "$pkg" || exit 1
+	fi
 	echo "Finished building package $pkg!"
 done
