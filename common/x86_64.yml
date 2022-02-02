@@ -1,5 +1,5 @@
-build-x86_64:
+publish-x86_64:
   variables:
     ARCH: x86_64
     VOID_BOOTSTRAP: x86_64
-  extends: .build_template
+  extends: .publish_template

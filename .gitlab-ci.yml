@@ -1,5 +1,4 @@
 stages:
-  - build
   - publish
 
 workflow:
@@ -13,8 +12,8 @@ variables:
   PKGS_PATH: /tmp/pkgs
   UPSTREAM_PATH: /tmp/upstream
 
-.build_template:
-  stage: build
+.publish_template:
+  stage: publish
   rules:
     - changes:
         - srcpkgs/**/*
@@ -32,21 +31,5 @@ variables:
     - ./common/prepare.sh
     - ./common/build.sh
     - ./common/deploy.sh
-  artifacts:
-    paths:
-      - public
 
 include: common/*.yml
-
-pages:
-  stage: publish
-  rules:
-    - changes:
-        - srcpkgs/**/*
-        - .gitlab-ci.yml
-        - common/**/*
-  script:
-    - echo "Publishing!"
-  artifacts:
-    paths:
-      - public
