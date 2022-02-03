@@ -14,9 +14,9 @@ for pkg in $(cat "$DELETED_PATH"); do
 	rm --force "$libc/$pkg"-[0-9]*.[0-9]*.[0-9]*_[0-9]*."$ARCH".*
 done
 
-pkg=$(cat $ADDED_PATH $MODIFIED_PATH)
+pkgs=$(cat $ADDED_PATH $MODIFIED_PATH)
 
-if [ "$pkg" == "" ]; then
+if [ "$pkgs" == "" ]; then
 	echo "No packages to deploy!"
 	exit 0
 fi
