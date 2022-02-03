@@ -13,6 +13,7 @@ mkdir -p "$libc"
 for pkg in $(cat "$DELETED_PATH"); do
 	rm --force "$libc/$pkg"-[0-9]*.[0-9]*.[0-9]*_[0-9]*."$ARCH".*
 done
+rm --force "$libc/$ARCH-repodata"
 
 pkgs=$(cat $ADDED_PATH $MODIFIED_PATH)
 
@@ -32,9 +33,9 @@ fi
 
 echo "$PRIVATE_PEM" | base64 --decode > /tmp/privkey
 
-xbps-rindex --add --force "$libc"/*."$ARCH".xbps || exit 1
+xbps-rindex --add "$libc"/*."$ARCH".xbps || exit 1
 xbps-rindex --privkey /tmp/privkey --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
-xbps-rindex --privkey /tmp/privkey --sign-pkg --force "$libc"/*."$ARCH".xbps || exit 1
+xbps-rindex --privkey /tmp/privkey --sign-pkg "$libc"/*."$ARCH".xbps || exit 1
 
 # Generate HTML.
 cat << EOF > index.html
