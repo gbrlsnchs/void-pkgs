@@ -35,7 +35,7 @@ echo "$PRIVATE_PEM" | base64 --decode > /tmp/privkey
 xbps-rindex --add --force "$libc"/*."$ARCH".xbps || exit 1
 xbps-rindex --privkey /tmp/privkey --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
 for pkg in $pkgs; do
-	xbps-rindex --privkey /tmp/privkey --sign-pkg --force "$libc"/pkg*."$ARCH".xbps || exit 1
+	xbps-rindex --privkey /tmp/privkey --sign-pkg --force "$libc/$pkg"-[0-9]*.[0-9]*.[0-9]*_[0-9]*."$ARCH".xbps || exit 1
 done
 
 # Generate HTML.
