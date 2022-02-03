@@ -16,13 +16,13 @@ variables:
   stage: publish
   rules:
     - changes:
-        - srcpkgs/**/*
-    - changes:
         - .gitlab-ci.yml
         - common/$ARCH.yml
         - common/*.sh
       variables:
         IS_CI_UPDATE: "true"
+    - changes:
+        - srcpkgs/**/*
   resource_group: publishing
   image: ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-$VOID_BOOTSTRAP
   script:
