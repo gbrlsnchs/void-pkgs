@@ -43,7 +43,11 @@ cat << EOF > index.html
 <head><title>$GITLAB_USER_NAME's custom Void packages</title></head>
 <body>
 <h1>Available C libraries</h1>
-<ul>
+<table>
+<thead>
+<tr><th>Library</th><th>Last Updated</th></tr>
+</thead>
+<tbody>
 EOF
 for lib in *; do
 	path=$(basename $lib)
@@ -54,10 +58,11 @@ for lib in *; do
 
 	last_update=$(stat -c %y "$lib")
 
-	printf '<li><a href="%s">%s</a> [%s]</li>' "$path" "$path" "$last_update" >> index.html
+	printf '<tr><td><a href="%s">%s</a></td><td>%s</td></tr>' "$path" "$path" "$last_update" >> index.html
 done
 cat << EOF >> index.html
-</ul>
+</tbody>
+</table>
 </body>
 </html>
 EOF
@@ -67,7 +72,11 @@ cat << EOF > "$libc/index.html"
 <head><title>$GITLAB_USER_NAME's custom Void packages - $libc</title></head>
 <body>
 <h1>Available packages for $libc</h1>
-<ul>
+<table>
+<thead>
+<tr><th>Package</th><th>Last Updated</th><th>Signature</th><th>Last Updated (Signature)</th></tr>
+</thead>
+<tbody>
 EOF
 for file in "$libc"/*.xbps; do
 	path=$(basename $file)
@@ -77,11 +86,14 @@ for file in "$libc"/*.xbps; do
 
 	last_update=$(stat -c %y "$file")
 	sig_file="$path.sig"
+	last_update_sig=$(stat -c %y "$file.sig")
 
-	printf '<li><a href="%s">%s</a> [%s] (<a href="%s">signature</a>)</li>' "$path" "$path" "$last_update" "$sig_file" >> "$libc/index.html"
+	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td><a href="%s">%s</a></td><td>%s</td></tr>' \
+		"$path" "$path" "$last_update" "$sig_file" "$sig_file", "$last_update_sig" >> "$libc/index.html"
 done
 cat << EOF >> "$libc/index.html"
-</ul>
+</tbody>
+</table>
 </body>
 </html>
 EOF
