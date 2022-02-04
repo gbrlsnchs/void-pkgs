@@ -67,7 +67,7 @@ for lib in *; do
 		continue
 	fi
 
-	last_update=$(date -r "$lib" +'%F %T %z')
+	last_update=$(date --iso-8601 "$lib" +'%F %T %z')
 
 	printf '<tr><td><a href="%s">%s</a></td><td>%s</td></tr>' "$path" "$path" "$last_update" >> index.html
 done
@@ -108,9 +108,9 @@ for file in "$libc"/*.xbps; do
 		continue
 	fi
 
-	last_update=$(date -r "$file" +'%F %T %z')
+	last_update=$(date --iso-8601 "$file" +'%F %T %z')
 	sig_file="$path.sig"
-	last_update_sig=$(date -r "$file.sig" +'%F %T %z')
+	last_update_sig=$(date --iso-8601 "$file.sig" +'%F %T %z')
 
 	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td><a href="%s">%s</a></td><td>%s</td></tr>' \
 		"$path" "$path" "$last_update" "$sig_file" "$sig_file" "$last_update_sig" >> "$libc/index.html"
