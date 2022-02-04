@@ -93,6 +93,8 @@ th, td {
 </style>
 </head>
 <body>
+<a href="..">Go back to previous page</a>
+<hr>
 <h1>Available packages for $libc</h1>
 <table>
 <thead>
