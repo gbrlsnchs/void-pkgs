@@ -22,7 +22,7 @@ for file in $ADDED_PATH $MODIFIED_PATH $DELETED_PATH; do
 		--name-only \
 		--no-rename \
 		--diff-filter $filter \
-		HEAD~ HEAD \
+		$CI_COMMIT_BEFORE_SHA HEAD \
 		"srcpkgs/*" \
 		| cut -d / -f 2 \
 		| tee $file \
