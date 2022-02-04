@@ -67,7 +67,7 @@ for lib in *; do
 		continue
 	fi
 
-	last_update=$(stat -c %y "$lib")
+	last_update=$(date -r "$lib" +'%F %T %z')
 
 	printf '<tr><td><a href="%s">%s</a></td><td>%s</td></tr>' "$path" "$path" "$last_update" >> index.html
 done
@@ -80,7 +80,18 @@ EOF
 
 cat << EOF > "$libc/index.html"
 <html>
-<head><title>$GITLAB_USER_NAME's custom Void packages - $libc</title></head>
+<head>
+<title>$GITLAB_USER_NAME's custom Void packages - $libc</title>
+<style>
+table {
+	border-collapse: collapse;
+}
+th, tr {
+	border: 1px solid black;
+	padding: 5px;
+}
+</style>
+</head>
 <body>
 <h1>Available packages for $libc</h1>
 <table>
@@ -95,7 +106,7 @@ for file in "$libc"/*.xbps; do
 		continue
 	fi
 
-	last_update=$(stat -c %y "$file")
+	last_update=$(date -r "$file" +'%F %T %z')
 	sig_file="$path.sig"
 	last_update_sig=$(stat -c %y "$file.sig")
 
