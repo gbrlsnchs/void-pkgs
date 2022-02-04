@@ -40,7 +40,18 @@ xbps-rindex --privkey /tmp/privkey --sign-pkg "$libc"/*."$ARCH".xbps || exit 1
 # Generate HTML.
 cat << EOF > index.html
 <html>
-<head><title>$GITLAB_USER_NAME's custom Void packages</title></head>
+<head>
+<title>$GITLAB_USER_NAME's custom Void packages</title>
+<style>
+table {
+	border-collapse: collapse;
+}
+th, tr {
+	border: 1px solid black;
+	padding: 5px;
+}
+</style>
+</head>
 <body>
 <h1>Available C libraries</h1>
 <table>
