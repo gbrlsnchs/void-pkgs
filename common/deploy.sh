@@ -108,7 +108,7 @@ for file in "$libc"/*.xbps; do
 
 	last_update=$(date -r "$file" +'%F %T %z')
 	sig_file="$path.sig"
-	last_update_sig=$(stat -c %y "$file.sig")
+	last_update_sig=$(date -r "$file.sig" +'%F %T %z')
 
 	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td><a href="%s">%s</a></td><td>%s</td></tr>' \
 		"$path" "$path" "$last_update" "$sig_file" "$sig_file", "$last_update_sig" >> "$libc/index.html"
