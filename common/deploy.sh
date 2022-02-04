@@ -46,7 +46,7 @@ cat << EOF > index.html
 table {
 	border-collapse: collapse;
 }
-th, tr {
+th, td {
 	border: 1px solid black;
 	padding: 5px;
 }
@@ -86,7 +86,7 @@ cat << EOF > "$libc/index.html"
 table {
 	border-collapse: collapse;
 }
-th, tr {
+th, td {
 	border: 1px solid black;
 	padding: 5px;
 }
