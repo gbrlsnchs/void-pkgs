@@ -37,6 +37,31 @@ xbps-rindex --add "$libc"/*."$ARCH".xbps || exit 1
 xbps-rindex --privkey /tmp/privkey --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
 xbps-rindex --privkey /tmp/privkey --sign-pkg "$libc"/*."$ARCH".xbps || exit 1
 
+# Commit changes.
+added_list=$(cat "$ADDED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
+modified_list=$(cat "$MODIFIED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
+deleted_list=$(cat "$DELETED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
+
+added_list=${added_list:-"  (Nothing)"}
+modified_list=${modified_list:-"  (Nothing)"}
+deleted_list=${deleted_list:-"  (Nothing)"}
+
+git config --global user.name "GitLab CI (job #$CI_JOB_ID)"
+git config --global user.email "$GITLAB_USER_EMAIL"
+git add $libc
+git commit --file - << EOF
+Update packages for $libc
+
+Added packages:
+$added_list
+
+Updated packages:
+$modified_list
+
+Deleted packages:
+$deleted_list
+EOF
+
 # Generate HTML.
 cat << EOF > index.html
 <html>
@@ -67,7 +92,7 @@ for lib in *; do
 		continue
 	fi
 
-	last_update=$(date --reference "$lib" +'%F %T %z')
+	last_update=$(git --no-pager log -1 --format="%ad" -- "$lib")
 
 	printf '<tr><td><a href="%s">%s</a></td><td>%s</td></tr>' "$path" "$path" "$last_update" >> index.html
 done
@@ -108,9 +133,9 @@ for file in "$libc"/*.xbps; do
 		continue
 	fi
 
-	last_update=$(date --reference "$file" +'%F %T %z')
+	last_update=$(git --no-pager log -1 --format="%ad" -- "$file")
 	sig_file="$path.sig"
-	last_update_sig=$(date --reference "$file.sig" +'%F %T %z')
+	last_update_sig=$(git --no-pager log -1 --format="%ad" -- "$file.sig")
 
 	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td><a href="%s">%s</a></td><td>%s</td></tr>' \
 		"$path" "$path" "$last_update" "$sig_file" "$sig_file" "$last_update_sig" >> "$libc/index.html"
@@ -121,31 +146,8 @@ cat << EOF >> "$libc/index.html"
 </body>
 </html>
 EOF
-
-# Commit changes.
-added_list=$(cat "$ADDED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
-modified_list=$(cat "$MODIFIED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
-deleted_list=$(cat "$DELETED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
-
-added_list=${added_list:-"  (Nothing)"}
-modified_list=${modified_list:-"  (Nothing)"}
-deleted_list=${deleted_list:-"  (Nothing)"}
-
-git config --global user.name "GitLab CI (job #$CI_JOB_ID)"
-git config --global user.email "$GITLAB_USER_EMAIL"
 git add index.html $libc
-git commit --file - << EOF
-Update packages for $libc
-
-Added packages:
-$added_list
-
-Updated packages:
-$modified_list
-
-Deleted packages:
-$deleted_list
-EOF
+git commit --amend --no-edit
 
 git remote set-url origin "https://${GITLAB_USER_LOGIN}:${ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git"
 
