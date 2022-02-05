@@ -1,0 +1,5 @@
+publish-x86_64-musl:
+  variables:
+    ARCH: x86_64-musl
+    VOID_BOOTSTRAP: x86_64-musl
+  extends: .publish_template
