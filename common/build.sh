@@ -29,7 +29,7 @@ echo XBPS_ALLOW_CHROOT_BREAKOUT=yes >> "$UPSTREAM_PATH/etc/conf"
 ln -s / "$UPSTREAM_PATH/masterdir"
 
 # Build packages that have been either added or modified.
-pkgs=$(cat "$ADDED_PATH" "$MODIFIED_PATH")
+pkgs=$(cat "$ADDED_PATH" "$MODIFIED_PATH" "$REBUILD_PATH")
 build_pkgs=$("$UPSTREAM_PATH/xbps-src" sort-dependencies "$pkgs")
 for pkg in $build_pkgs; do
 	echo "Building package $pkg..."
