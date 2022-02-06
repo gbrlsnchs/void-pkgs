@@ -4,11 +4,11 @@ for file in "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH" "$REBUILD_PATH"; do
 done
 
 for file in "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH"; do
+	action=$(basename $file)
 	echo "Packages to be $action":
 
 	# NOTE: File names have to match Git filters.
-	file_name=$(basename file)
-	filter=$(echo "${file_name^}" | cut --characters 1)
+	filter=$(echo "${action^}" | cut --characters 1)
 
 	git diff-tree \
 		-r \
