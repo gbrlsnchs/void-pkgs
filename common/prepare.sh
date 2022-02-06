@@ -21,3 +21,12 @@ for file in $ADDED_PATH $MODIFIED_PATH $DELETED_PATH; do
 		| tee $file \
 		| sed "s/^/  * /" >&2
 done
+
+# Update all packages when there are CI changes.
+if [ "$IS_CI_UPDATE" == "true" ]; then
+	echo "Preparing all existing packages that wouldn't be built to get rebuilt due to CI configuration changes"
+	ls -1 srcpkgs \
+		| grep --invert-match --file "$ADDED_PATH" \
+		| grep --invert-match --file "$MODIFIED_PATH" \
+		> "$REBUILD_PATH"
+fi

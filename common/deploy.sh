@@ -15,12 +15,6 @@ for pkg in $(cat "$DELETED_PATH"); do
 done
 rm --force "$libc/$ARCH-repodata"
 
-# Update all packages when there are CI changes.
-if [ "$IS_CI_UPDATE" == "true" ]; then
-	echo "Preparing all existing packages to get rebuilt due to CI configuration changes"
-	ls -1 srcpkgs > "$REBUILD_PATH"
-fi
-
 pkgs=$(cat $ADDED_PATH $MODIFIED_PATH $REBUILD_PATH)
 
 if [ "$pkgs" == "" ]; then
