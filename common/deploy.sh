@@ -23,7 +23,9 @@ if [ "$pkgs" == "" ]; then
 fi
 
 binpkgs="$UPSTREAM_PATH/hostdir/binpkgs"
-cp --recursive --force "$binpkgs"/* "$libc"
+echo "Files in $binpkgs:"
+ls -1 "$binpkgs" | sed "s/^/  * /"
+cp --recursive --force "$binpkgs"/* "$libc" || exit 1
 
 # Sign packages.
 if [ "$PRIVATE_PEM" == "" ]; then
