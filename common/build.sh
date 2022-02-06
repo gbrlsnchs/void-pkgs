@@ -12,7 +12,7 @@ fi
 
 # Move elegible packages to upstream directory. This guarantees we use our own versions when
 # building other packages.
-eligible_pkgs=$(ls -1 srcpkgs | grep --invert-match --file "$DELETED_PATH")
+eligible_pkgs=$(find srcpkgs -maxdepth 1 "srcpkgs/*" | grep --invert-match --file "$DELETED_PATH")
 echo "The following packages will be added/updated:"
 echo "$eligible_pkgs" | sed "s/^/  * /"
 
