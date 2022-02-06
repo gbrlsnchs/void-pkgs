@@ -15,7 +15,7 @@ for pkg in $(cat "$DELETED_PATH"); do
 done
 rm --force "$libc/$ARCH-repodata"
 
-pkgs=$(cat $ADDED_PATH $MODIFIED_PATH $REBUILD_PATH)
+pkgs=$(cat "$PKGS_PATH")
 
 if [ "$pkgs" == "" ]; then
 	echo "No packages to deploy!"
