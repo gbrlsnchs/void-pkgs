@@ -1,14 +1,7 @@
 # Create files ahead of time so there are no errors in further scripts.
-for file in $ADDED_PATH $MODIFIED_PATH $DELETED_PATH; do
+for file in $ADDED_PATH $MODIFIED_PATH $DELETED_PATH $REBUILD_PATH; do
 	touch $file
 done
-
-# Update _all_ packages when there are CI changes.
-if [ "$IS_CI_UPDATE" == "true" ]; then
-	echo "Preparing all packages to get rebuilt"
-	ls -1 srcpkgs > "$MODIFIED_PATH"
-	exit 0
-fi
 
 for file in $ADDED_PATH $MODIFIED_PATH $DELETED_PATH; do
 	echo "Packages to be $action":

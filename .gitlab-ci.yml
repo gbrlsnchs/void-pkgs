@@ -9,6 +9,7 @@ variables:
   ADDED_PATH: /tmp/added
   MODIFIED_PATH: /tmp/modified
   DELETED_PATH: /tmp/deleted
+  REBUILD_PATH: /tmp/rebuild
   PKGS_PATH: /tmp/pkgs
   UPSTREAM_PATH: /tmp/upstream
 

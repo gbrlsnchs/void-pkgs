@@ -15,7 +15,13 @@ for pkg in $(cat "$DELETED_PATH"); do
 done
 rm --force "$libc/$ARCH-repodata"
 
-pkgs=$(cat $ADDED_PATH $MODIFIED_PATH)
+# Update all packages when there are CI changes.
+if [ "$IS_CI_UPDATE" == "true" ]; then
+	echo "Preparing all existing packages to get rebuilt due to CI configuration changes"
+	ls -1 srcpkgs > "$REBUILD_PATH"
+fi
+
+pkgs=$(cat $ADDED_PATH $MODIFIED_PATH $REBUILD_PATH)
 
 if [ "$pkgs" == "" ]; then
 	echo "No packages to deploy!"
@@ -41,10 +47,12 @@ xbps-rindex --privkey /tmp/privkey --sign-pkg "$libc"/*."$ARCH".xbps || exit 1
 added_list=$(cat "$ADDED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
 modified_list=$(cat "$MODIFIED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
 deleted_list=$(cat "$DELETED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
+rebuilt_list=$(cat "$REBUILD_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
 
-added_list=${added_list:-"  (Nothing)"}
-modified_list=${modified_list:-"  (Nothing)"}
-deleted_list=${deleted_list:-"  (Nothing)"}
+added_list=${added_list:-"  (None)"}
+modified_list=${modified_list:-"  (None)"}
+deleted_list=${deleted_list:-"  (None)"}
+rebuilt_list=${rebuilt_list:-"  (None)"}
 
 git config --global user.name "GitLab CI (job #$CI_JOB_ID)"
 git config --global user.email "$GITLAB_USER_EMAIL"
@@ -60,6 +68,9 @@ $modified_list
 
 Deleted packages:
 $deleted_list
+
+Packages rebuilt due to infrastructure changes:
+$rebuilt_list
 EOF
 
 # Generate HTML.
