@@ -16,8 +16,7 @@ eligible_pkgs=$(find srcpkgs -maxdepth 1 -path "srcpkgs/*" | grep --invert-match
 echo "The following packages will be added/updated:"
 echo "$eligible_pkgs" | sed "s/^/  * /"
 
-for pkg in $eligible_pkgs; do
-	src="srcpkgs/$pkg"
+for src in $eligible_pkgs; do
 	dst="$UPSTREAM_PATH/$src"
 
 	echo "Copying $src to $dst"
