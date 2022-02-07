@@ -144,7 +144,7 @@ th, td {
 <h1>Available packages for $libc</h1>
 <table>
 <thead>
-<tr><th>Package</th><th>Size</th><th>Last Update</th><th>Signature</th><th>Last Update (Signature)</th></tr>
+<tr><th>Package</th><th>Size</th><th>Last Update</th><th>Signature</th><th>Signed At</th></tr>
 </thead>
 <tbody>
 EOF
