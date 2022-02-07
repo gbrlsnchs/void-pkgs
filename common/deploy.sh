@@ -105,7 +105,7 @@ for lib in *; do
 	last_update=$(git --no-pager log -1 --format="%ad" -- "$lib")
 
 	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td><pre><code>%s</code></pre></tr>' \
-		"$path" "$path" "$last_update" "$(cat "$changelog_file")" >> index.html
+		"$path" "$path" "$last_update" "$(tail --lines +4 "$changelog_file")" >> index.html
 done
 cat << EOF >> index.html
 </tbody>
