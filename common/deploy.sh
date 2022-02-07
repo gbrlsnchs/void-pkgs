@@ -45,10 +45,10 @@ modified_list=$(cat "$MODIFIED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
 deleted_list=$(cat "$DELETED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
 rebuilt_list=$(cat "$REBUILD_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
 
-added_list=${added_list:-"  (None)"}
-modified_list=${modified_list:-"  (None)"}
-deleted_list=${deleted_list:-"  (None)"}
-rebuilt_list=${rebuilt_list:-"  (None)"}
+added_list=${added_list:-"  (none)"}
+modified_list=${modified_list:-"  (none)"}
+deleted_list=${deleted_list:-"  (none)"}
+rebuilt_list=${rebuilt_list:-"  (none)"}
 
 changelog_file="/tmp/changelog.txt"
 cat << EOF > "$changelog_file"
