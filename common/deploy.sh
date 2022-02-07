@@ -99,7 +99,7 @@ pre {
 <h1>Available C libraries</h1>
 <table>
 <thead>
-<tr><th>Library</th><th>Last Update</th></tr>
+<tr><th>Library</th><th>Size</th><th>Last Update</th></tr>
 </thead>
 <tbody>
 EOF
@@ -112,8 +112,8 @@ for lib in *; do
 
 	last_update=$(git --no-pager log -1 --format="%ad" -- "$lib")
 
-	printf '<tr><td><a href="%s">%s</a></td><td>%s</td></tr>' \
-		"$path" "$path" "$last_update" >> index.html
+	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td>%s</td></tr>' \
+		"$path" "$path" "$(du --human-readable "$lib" | cut --fields 1)" "$last_update" >> index.html
 done
 cat << EOF >> index.html
 </tbody>
@@ -144,7 +144,7 @@ th, td {
 <h1>Available packages for $libc</h1>
 <table>
 <thead>
-<tr><th>Package</th><th>Last Update</th><th>Signature</th><th>Last Update (Signature)</th></tr>
+<tr><th>Package</th><th>Size</th><th>Last Update</th><th>Signature</th><th>Last Update (Signature)</th></tr>
 </thead>
 <tbody>
 EOF
@@ -158,8 +158,9 @@ for file in "$libc"/*.xbps; do
 	sig_file="$path.sig"
 	last_update_sig=$(git --no-pager log -1 --format="%ad" -- "$file.sig")
 
-	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td><a href="%s">%s</a></td><td>%s</td></tr>' \
-		"$path" "$path" "$last_update" "$sig_file" "$sig_file" "$last_update_sig" >> "$libc/index.html"
+	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td>%s</td><td><a href="%s">%s</a></td><td>%s</td></tr>' \
+		"$path" "$path" "$(du --human-readable "$file" | cut --fields 1)" "$last_update" "$sig_file" "$sig_file" "$last_update_sig" \
+		>> "$libc/index.html"
 done
 cat << EOF >> "$libc/index.html"
 </tbody>
