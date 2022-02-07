@@ -87,6 +87,12 @@ th, td {
 	border: 1px solid black;
 	padding: 5px;
 }
+pre {
+	overflow: visible;
+	width: fit-content;
+	border: 1px solid black;
+	padding: 15px;
+}
 </style>
 </head>
 <body>
