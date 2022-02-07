@@ -50,7 +50,8 @@ modified_list=${modified_list:-"  (None)"}
 deleted_list=${deleted_list:-"  (None)"}
 rebuilt_list=${rebuilt_list:-"  (None)"}
 
-commit_message=$(cat << EOF
+changelog_file="changelog_$libc.txt"
+cat << EOF > "$changelog_file"
 Update packages for $libc
 
 Added packages:
@@ -64,12 +65,12 @@ $deleted_list
 
 Packages rebuilt due to infrastructure changes:
 $rebuilt_list
-EOF)
+EOF
 
 git config --global user.name "GitLab CI (job #$CI_JOB_ID)"
 git config --global user.email "$GITLAB_USER_EMAIL"
-git add $libc
-git commit --message "$commit_message"
+git add "$libc" "$changelog_file"
+git commit --file "$changelog_file"
 
 # Generate HTML.
 cat << EOF > index.html
@@ -90,7 +91,7 @@ th, td {
 <h1>Available C libraries</h1>
 <table>
 <thead>
-<tr><th>Library</th><th>Last Update</th></tr>
+<tr><th>Library</th><th>Last Update</th><th>Changelog</th></tr>
 </thead>
 <tbody>
 EOF
@@ -103,17 +104,12 @@ for lib in *; do
 
 	last_update=$(git --no-pager log -1 --format="%ad" -- "$lib")
 
-	printf '<tr><td><a href="%s">%s</a></td><td>%s</td></tr>' "$path" "$path" "$last_update" >> index.html
+	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td><pre><code>%s</code></pre></tr>' \
+		"$path" "$path" "$last_update" "$(cat "$changelog_file")" >> index.html
 done
 cat << EOF >> index.html
 </tbody>
 </table>
-<h1>Last Changelog</h1>
-<pre>
-<code>
-$commit_message
-</code>
-</pre>
 </body>
 </html>
 EOF
