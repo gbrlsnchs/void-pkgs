@@ -52,7 +52,7 @@ rebuilt_list=${rebuilt_list:-"  (None)"}
 
 changelog_file="changelog_$libc.txt"
 cat << EOF > "$changelog_file"
-Update packages for $libc
+Deploy packages for $libc
 
 Added packages:
 $added_list
