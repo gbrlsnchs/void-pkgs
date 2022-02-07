@@ -50,10 +50,7 @@ modified_list=${modified_list:-"  (None)"}
 deleted_list=${deleted_list:-"  (None)"}
 rebuilt_list=${rebuilt_list:-"  (None)"}
 
-git config --global user.name "GitLab CI (job #$CI_JOB_ID)"
-git config --global user.email "$GITLAB_USER_EMAIL"
-git add $libc
-git commit --file - << EOF
+commit_message=$(cat << EOF
 Update packages for $libc
 
 Added packages:
@@ -67,7 +64,12 @@ $deleted_list
 
 Packages rebuilt due to infrastructure changes:
 $rebuilt_list
-EOF
+EOF)
+
+git config --global user.name "GitLab CI (job #$CI_JOB_ID)"
+git config --global user.email "$GITLAB_USER_EMAIL"
+git add $libc
+git commit --message "$commit_message"
 
 # Generate HTML.
 cat << EOF > index.html
@@ -88,7 +90,7 @@ th, td {
 <h1>Available C libraries</h1>
 <table>
 <thead>
-<tr><th>Library</th><th>Last Updated</th></tr>
+<tr><th>Library</th><th>Last Update</th></tr>
 </thead>
 <tbody>
 EOF
@@ -106,6 +108,12 @@ done
 cat << EOF >> index.html
 </tbody>
 </table>
+<h1>Last Changelog</h1>
+<pre>
+<code>
+$commit_message
+</code>
+</pre>
 </body>
 </html>
 EOF
@@ -130,7 +138,7 @@ th, td {
 <h1>Available packages for $libc</h1>
 <table>
 <thead>
-<tr><th>Package</th><th>Last Updated</th><th>Signature</th><th>Last Updated (Signature)</th></tr>
+<tr><th>Package</th><th>Last Update</th><th>Signature</th><th>Last Update (Signature)</th></tr>
 </thead>
 <tbody>
 EOF
