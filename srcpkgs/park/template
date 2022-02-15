@@ -1,0 +1,20 @@
+# Template file for 'park'
+pkgname=park
+version=0.1.4
+revision=1
+wrksrc="${pkgname}-v${version}"
+build_style=cargo
+short_desc="Configuration-based dotfiles manager"
+maintainer="Gabriel Sanches <gabriel@gsr.dev>"
+license="MIT"
+homepage="https://gitlab.com/gbrlsnchs/park"
+distfiles="https://gitlab.com/gbrlsnchs/${pkgname}/-/archive/v${version}/${pkgname}-v${version}.tar.gz"
+checksum=4ac2c12f7d063b1614d3e767942daea05765593566e102939976d267950f546a
+
+post_install() {
+	vlicense LICENSE
+
+	vcompletion target/completions/$pkgname.bash bash
+	vcompletion target/completions/_$pkgname zsh
+	vcompletion target/completions/$pkgname.fish fish
+}
