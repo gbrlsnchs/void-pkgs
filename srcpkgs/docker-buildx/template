@@ -1,0 +1,24 @@
+# Template file for 'docker-buildx'
+pkgname=docker-buildx
+_pkgname=buildx
+version=0.7.1
+revision=1
+wrksrc="${_pkgname}-${version}"
+build_style=go
+go_import_path="github.com/docker/buildx/cmd/${_pkgname}"
+go_ldflags="-X github.com/docker/buildx/version.Version=${version}"
+depends="docker-cli"
+short_desc="Docker CLI plugin for extended build capabilities with BuildKit"
+maintainer="Gabriel Sanches <gabriel@gsr.dev>"
+license="Apache-2.0"
+homepage="https://docs.docker.com/buildx/working-with-buildx/"
+distfiles="https://github.com/docker/buildx/archive/refs/tags/v${version}.tar.gz"
+checksum=5df4224eeac5a00d1bef2344660e93415264a64ea4742133f2c2a794c563ef50
+
+post_install() {
+	local plugins_dir=/usr/libexec/docker/cli-plugins
+	local dest_plugins_dir="${DESTDIR}/${plugins_dir}"
+	mkdir -p $dest_plugins_dir
+	mv "${DESTDIR}/usr/bin/${_pkgname}" "${dest_plugins_dir}/${pkgname}"
+	ln -s ${plugins_dir}/${pkgname} ${DESTDIR}/usr/bin/${pkgname}
+}
