@@ -7,9 +7,11 @@ This repository holds custom templates I have written for my personal use. They'
 CI and transformed into binary packages, which are hosted at https://void.gsr.dev.
 
 ## How to use
-Here is an example of how to use the custom repository:
+From [the official handbook](https://docs.voidlinux.org/xbps/repositories/custom.html):
 ```console
-# xbps-install --repository https://void.gsr.dev/glibc efm-langserver
+# echo 'repository=https://void.gsr.dev/glibc' > /etc/xbps.d/my-remote-repo.conf
 ```
+
+After that, all XBPS commands will be able to see the custom packages.
 
 Have fun!
