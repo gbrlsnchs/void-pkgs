@@ -24,7 +24,7 @@ fi
 
 binpkgs="$UPSTREAM_PATH/hostdir/binpkgs"
 echo "Files in $binpkgs:"
-find "$binpkgs" -maxdepth 1 -path "$binpkgs/*" -exec basename {} \; | sed "s/^/  * /"
+find "$binpkgs" -maxdepth 1 -path "$binpkgs/*" -printf "%f\n" | sed "s/^/  * /"
 cp --recursive --force "$binpkgs"/* "$libc" || exit 1
 
 # Sign packages.
