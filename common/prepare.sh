@@ -1,4 +1,4 @@
-if [ "$IS_DEPLOY_ONLY" == "1" ]; then
+if [ "$IS_DEPLOY_ONLY" == "true" ]; then
 	echo "There are only changes in deploy, skipping preparation..."
 	exit 0
 fi
@@ -29,7 +29,7 @@ for file in "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH"; do
 done
 
 # Update all packages when there are CI changes.
-if [ "$IS_CI_UPDATE" == "1" ]; then
+if [ "$IS_CI_UPDATE" == "true" ]; then
 	echo "Preparing all existing packages that wouldn't be built to get rebuilt due to CI configuration changes"
 	find srcpkgs -maxdepth 1 -path "srcpkgs/*" -printf "%f\n" \
 		| grep --invert-match --file "$ADDED_PATH" \

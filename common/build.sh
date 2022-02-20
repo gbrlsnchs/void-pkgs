@@ -1,4 +1,4 @@
-if [ "$IS_DEPLOY_ONLY" == "1" ]; then
+if [ "$IS_DEPLOY_ONLY" == "true" ]; then
 	echo "There are only changes in deploy, skipping build..."
 	exit 0
 fi
