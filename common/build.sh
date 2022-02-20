@@ -13,7 +13,7 @@ fi
 # Move elegible packages to upstream directory. This guarantees we use our own versions when
 # building other packages.
 eligible_pkgs=$(find srcpkgs -maxdepth 1 -path "srcpkgs/*" | grep --invert-match --file "$DELETED_PATH")
-echo "The following packages will be added/updated:"
+echo "The following custom packages will be used alongside upstream packages:"
 echo "$eligible_pkgs" | sed "s/^/  * /"
 
 for src in $eligible_pkgs; do
