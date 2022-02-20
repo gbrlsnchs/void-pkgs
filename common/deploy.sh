@@ -19,25 +19,24 @@ pkgs=$(cat "$PKGS_PATH")
 
 if [ "$pkgs" == "" ]; then
 	echo "No packages to deploy!"
-	exit 0
+else
+	binpkgs="$UPSTREAM_PATH/hostdir/binpkgs"
+	echo "Files in $binpkgs:"
+	find "$binpkgs" -maxdepth 1 -path "$binpkgs/*" -printf "%f\n" | sed "s/^/  * /"
+	cp --recursive --force "$binpkgs"/* "$libc" || exit 1
+
+	# Sign packages.
+	if [ "$PRIVATE_PEM" == "" ]; then
+		echo "Missing private key!"
+		exit 1
+	fi
+
+	echo "$PRIVATE_PEM" | base64 --decode > /tmp/privkey
+
+	xbps-rindex --add "$libc"/*."$ARCH".xbps || exit 1
+	xbps-rindex --privkey /tmp/privkey --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
+	xbps-rindex --privkey /tmp/privkey --sign-pkg "$libc"/*."$ARCH".xbps || exit 1
 fi
-
-binpkgs="$UPSTREAM_PATH/hostdir/binpkgs"
-echo "Files in $binpkgs:"
-find "$binpkgs" -maxdepth 1 -path "$binpkgs/*" -printf "%f\n" | sed "s/^/  * /"
-cp --recursive --force "$binpkgs"/* "$libc" || exit 1
-
-# Sign packages.
-if [ "$PRIVATE_PEM" == "" ]; then
-	echo "Missing private key!"
-	exit 1
-fi
-
-echo "$PRIVATE_PEM" | base64 --decode > /tmp/privkey
-
-xbps-rindex --add "$libc"/*."$ARCH".xbps || exit 1
-xbps-rindex --privkey /tmp/privkey --sign --signedby "$GITLAB_USER_NAME" "$libc" || exit 1
-xbps-rindex --privkey /tmp/privkey --sign-pkg "$libc"/*."$ARCH".xbps || exit 1
 
 # Commit changes.
 added_list=$(cat "$ADDED_PATH" | sed --regexp-extended "s/(.+)/  * \1/")
@@ -169,6 +168,7 @@ cat << EOF >> "$libc/index.html"
 </html>
 EOF
 git add index.html $libc
+git diff-index --quiet HEAD -- || echo "There is nothing to deploy!" && exit 0
 git commit --amend --no-edit
 
 git remote set-url origin "https://${GITLAB_USER_LOGIN}:${ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git"
