@@ -18,6 +18,7 @@ for file in "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH"; do
 		"$CI_COMMIT_BEFORE_SHA" HEAD \
 		"srcpkgs/*" \
 		| cut --delimiter / --fields 2 \
+		| uniq
 		| tee "$file" \
 		| sed "s/^/  * /"
 done
