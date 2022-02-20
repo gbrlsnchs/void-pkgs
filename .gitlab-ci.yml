@@ -22,7 +22,7 @@ variables:
         - common/prepare.sh
         - common/build.sh
       variables:
-        IS_CI_UPDATE: "true"
+        IS_CI_UPDATE: 1
     - changes:
         - srcpkgs/**/*
     - changes:
