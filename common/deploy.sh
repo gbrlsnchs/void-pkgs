@@ -78,6 +78,7 @@ cat << EOF > index.html
 <html>
 <head>
 <title>$GITLAB_USER_NAME's custom Void packages</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 table {
 	border-collapse: collapse;
@@ -127,6 +128,7 @@ cat << EOF > "$libc/index.html"
 <html>
 <head>
 <title>$GITLAB_USER_NAME's custom Void packages - $libc</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 table {
 	border-collapse: collapse;
