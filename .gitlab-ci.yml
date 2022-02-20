@@ -19,11 +19,16 @@ variables:
     - changes:
         - .gitlab-ci.yml
         - common/$ARCH.yml
-        - common/*.sh
+        - common/prepare.sh
+        - common/build.sh
       variables:
         IS_CI_UPDATE: "true"
     - changes:
         - srcpkgs/**/*
+    - changes:
+        - common/deploy.sh
+      variables:
+        DEPLOY_ONLY: 1
   resource_group: publishing
   image: ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-$VOID_BOOTSTRAP
   script:

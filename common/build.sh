@@ -1,3 +1,8 @@
+if [ "$IS_DEPLOY_ONLY" == "1" ]; then
+	echo "There are only changes in deploy, skipping build..."
+	exit 0
+fi
+
 # Clone upstream package repository.
 dir=$(pwd)/upstream-packages
 

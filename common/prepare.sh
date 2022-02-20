@@ -1,3 +1,8 @@
+if [ "$IS_DEPLOY_ONLY" == "1" ]; then
+	echo "There are only changes in deploy, skipping preparation..."
+	exit 0
+fi
+
 # Create files ahead of time so there are no errors in further scripts.
 for file in "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH" "$REBUILD_PATH"; do
 	touch "$file"
