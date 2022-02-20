@@ -118,7 +118,7 @@ done
 cat << EOF >> index.html
 </tbody>
 </table>
-<h1>Lastest Changelog</h1>
+<h1>Latest Changelog</h1>
 <pre><code>$changelog_msg</code></pre>
 </body>
 </html>
