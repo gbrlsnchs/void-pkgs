@@ -172,7 +172,7 @@ cat << EOF >> "$libc/index.html"
 </html>
 EOF
 git add index.html $libc
-git diff-index --quiet HEAD -- || echo "There is nothing to deploy!" && exit 0
+git diff-index --quiet HEAD || (echo "There is nothing to deploy!" && exit 0)
 git commit --amend --no-edit
 
 git remote set-url origin "https://${GITLAB_USER_LOGIN}:${ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git"
