@@ -96,6 +96,8 @@ pre {
 </style>
 </head>
 <body>
+<a href="https://codeberg.org/gbrlsnchs/void-pkgs">Go to source</a>
+<hr>
 <h1>Available C libraries</h1>
 <table>
 <thead>
