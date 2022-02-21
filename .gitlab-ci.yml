@@ -47,7 +47,8 @@ include: common/*.yml
 
 update_ref:
   stage: update_ref
-  needs: publish
+  needs:
+    - publish
   rules:
     - exists: 
       - $LAST_DEPLOYMENT_COMMIT_PATH
