@@ -107,9 +107,11 @@ EOF
 for lib in *; do
 	path=$(basename $lib)
 
-	if [ "$path" == "index.html" ]; then
-		continue
-	fi
+	case "$path" in
+		"index.html" | "$LAST_DEPLOYMENT_COMMIT_FILE")
+			continue
+			;;
+	esac
 
 	last_update=$(git --no-pager log -1 --format="%ad" -- "$lib")
 
