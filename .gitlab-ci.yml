@@ -37,6 +37,7 @@ variables:
   script:
     - xbps-install --sync --update --yes
     - xbps-install --yes git
+    - git fetch
     - ./common/prepare.sh
     - ./common/build.sh
     - ./common/deploy.sh

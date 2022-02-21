@@ -9,7 +9,7 @@ for file in "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH" "$REBUILD_PATH"; do
 done
 
 # Get last deploy commit information from the deployment branch.
-git fetch && git restore --source "$PAGES_BRANCH" -- "$LAST_DEPLOYMENT_COMMIT_FILE" || exit 1
+git restore --source "origin/$PAGES_BRANCH" -- "$LAST_DEPLOYMENT_COMMIT_FILE" || exit 1
 mv "$LAST_DEPLOYMENT_COMMIT_FILE" "$LAST_DEPLOYMENT_COMMIT_PATH"
 
 last_deploy_commit="$(cat "$LAST_DEPLOYMENT_COMMIT_PATH")"
