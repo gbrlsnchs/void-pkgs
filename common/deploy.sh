@@ -171,8 +171,7 @@ cat << EOF >> "$libc/index.html"
 </html>
 EOF
 
-cat "$LAST_DEPLOYMENT_COMMIT_PATH" > "$LAST_DEPLOYMENT_COMMIT_FILE"
-git add index.html "$libc" "$LAST_DEPLOYMENT_COMMIT_FILE"
+git add index.html "$libc"
 
 # Let's check whether we need to update the repository. If srcpkgs were updated, then it's
 # improbable that their HTML files won't also be updated.
@@ -181,6 +180,9 @@ if [ "$?" = 0 ]; then
 	echo "There is nothing to deploy!"
 	exit 1
 fi
+
+cat "$LAST_DEPLOYMENT_COMMIT_PATH" > "$LAST_DEPLOYMENT_COMMIT_FILE"
+git add "$LAST_DEPLOYMENT_COMMIT_FILE"
 
 git commit --amend --no-edit
 git remote set-url origin "https://${GITLAB_USER_LOGIN}:${ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git"
