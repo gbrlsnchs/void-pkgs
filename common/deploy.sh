@@ -1,5 +1,5 @@
 # Move packages to dist directory.
-echo "$(git rev-parse HEAD)" > "$LAST_DEPLOYMENT_COMMIT_PATH"
+git rev-parse HEAD > "$LAST_DEPLOYMENT_COMMIT_PATH"
 git fetch && git checkout "$PAGES_BRANCH" || exit 1
 
 case "$ARCH" in
