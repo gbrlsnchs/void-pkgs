@@ -12,8 +12,8 @@ variables:
   REBUILD_PATH: /tmp/rebuild
   PKGS_PATH: /tmp/pkgs
   UPSTREAM_PATH: /tmp/upstream
-  LAST_DEPLOY_COMMIT_FILE: last_deploy_commit
-  LAST_DEPLOY_COMMIT_PATH: /tmp/last_deploy_commit
+  LAST_DEPLOYMENT_COMMIT_FILE: last_deployment_commit
+  LAST_DEPLOYMENT_COMMIT_PATH: /tmp/last_deployment_commit
   PAGES_BRANCH: pages
 
 .publish_template:
@@ -31,7 +31,7 @@ variables:
     - changes:
         - common/deploy.sh
       variables:
-        DEPLOY_ONLY: "true"
+        DEPLOYMENT_ONLY: "true"
   resource_group: publishing
   image: ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-$VOID_BOOTSTRAP
   script:

@@ -1,5 +1,5 @@
 # Move packages to dist directory.
-echo "$(git rev-parse HEAD)" > "$LAST_DEPLOY_COMMIT_PATH"
+echo "$(git rev-parse HEAD)" > "$LAST_DEPLOYMENT_COMMIT_PATH"
 git fetch && git checkout "$PAGES_BRANCH" || exit 1
 
 case "$ARCH" in
@@ -171,8 +171,8 @@ cat << EOF >> "$libc/index.html"
 </html>
 EOF
 
-cat "$LAST_DEPLOY_COMMIT_PATH" > "$LAST_DEPLOY_COMMIT_FILE"
-git add index.html "$libc" "$LAST_DEPLOY_COMMIT_FILE"
+cat "$LAST_DEPLOYMENT_COMMIT_PATH" > "$LAST_DEPLOYMENT_COMMIT_FILE"
+git add index.html "$libc" "$LAST_DEPLOYMENT_COMMIT_FILE"
 
 # Let's check whether we need to update the repository. If srcpkgs were updated, then it's
 # improbable that their HTML files won't also be updated.

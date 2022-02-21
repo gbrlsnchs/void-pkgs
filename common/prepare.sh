@@ -1,4 +1,4 @@
-if [ "$IS_DEPLOY_ONLY" == "true" ]; then
+if [ "$IS_DEPLOYMENT_ONLY" == "true" ]; then
 	echo "There are only changes in deploy, skipping preparation..."
 	exit 0
 fi
@@ -9,10 +9,10 @@ for file in "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH" "$REBUILD_PATH"; do
 done
 
 # Get last deploy commit information from the deployment branch.
-git fetch && git checkout "$PAGES_BRANCH" "$LAST_DEPLOY_COMMIT_FILE" || exit 1
-mv "$LAST_DEPLOY_COMMIT_FILE" "$LAST_DEPLOY_COMMIT_PATH"
+git fetch && git checkout "$PAGES_BRANCH" "$LAST_DEPLOYMENT_COMMIT_FILE" || exit 1
+mv "$LAST_DEPLOYMENT_COMMIT_FILE" "$LAST_DEPLOYMENT_COMMIT_PATH"
 
-last_deploy_commit="$(cat "$LAST_DEPLOY_COMMIT_PATH")"
+last_deploy_commit="$(cat "$LAST_DEPLOYMENT_COMMIT_PATH")"
 last_deploy_commit="${last_deploy_commit:-"$CI_COMMIT_BEFORE_SHA"}"
 
 for file in "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH"; do
