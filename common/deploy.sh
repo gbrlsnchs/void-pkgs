@@ -172,9 +172,16 @@ cat << EOF >> "$libc/index.html"
 </html>
 EOF
 git add index.html $libc
-git diff-index --quiet HEAD || (echo "There is nothing to deploy!" && exit 1) || exit 0
-git commit --amend --no-edit
 
+# Let's check whether we need to update the repository. If srcpkgs were updated, then it's
+# improbable that their HTML files won't also be updated.
+git diff-index --quiet HEAD
+if [ "$?" = 0 ]; then
+	echo "There is nothing to deploy!"
+	exit 1
+fi
+
+git commit --amend --no-edit
 git remote set-url origin "https://${GITLAB_USER_LOGIN}:${ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git"
 
 echo "Pushing to $(git remote get-url origin)..."
