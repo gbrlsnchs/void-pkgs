@@ -1,5 +1,6 @@
 stages:
   - publish
+  - update_ref
 
 workflow:
   rules:
@@ -43,3 +44,15 @@ variables:
     - ./common/deploy.sh
 
 include: common/*.yml
+
+update_ref:
+  stage: update_ref
+  needs: publish
+  rules:
+    - exists: 
+      - $LAST_DEPLOYMENT_COMMIT_PATH
+  script:
+    - cat "$LAST_DEPLOYMENT_COMMIT_PATH" > "$LAST_DEPLOYMENT_COMMIT_FILE"
+    - git add "$LAST_DEPLOYMENT_COMMIT_FILE"
+    - git commit --message "Update deployment checkpoint"
+    - git push --force --quiet origin "$PAGES_BRANCH" || exit 1

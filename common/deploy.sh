@@ -180,11 +180,9 @@ git add index.html "$libc"
 git diff-index --quiet HEAD
 if [ "$?" = 0 ]; then
 	echo "There is nothing to deploy!"
-	exit 1
+	rm "$LAST_DEPLOYMENT_COMMIT_PATH"
+	exit 0
 fi
-
-cat "$LAST_DEPLOYMENT_COMMIT_PATH" > "$LAST_DEPLOYMENT_COMMIT_FILE"
-git add "$LAST_DEPLOYMENT_COMMIT_FILE"
 
 git commit --amend --no-edit
 git remote set-url origin "https://${GITLAB_USER_LOGIN}:${ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git"
