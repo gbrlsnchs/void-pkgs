@@ -45,10 +45,8 @@ variables:
 
 include: common/*.yml
 
-update_ref:
+update_deployment_pivot:
   stage: update_ref
-  needs:
-    - publish
   rules:
     - exists: 
       - $LAST_DEPLOYMENT_COMMIT_PATH
