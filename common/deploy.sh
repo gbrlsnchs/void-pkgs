@@ -9,7 +9,7 @@ esac
 mkdir -p "$libc"
 
 # Delete files related to the package in the current architecture.
-for pkg in $(cat "$DELETED_PATH"); do
+for pkg in $(cat "$MODIFIED_PATH" "$DELETED_PATH"); do
 	rm --force "$libc/$pkg"-[0-9]*.[0-9]*.[0-9]*_[0-9]*."$ARCH".*
 done
 rm --force "$libc/$ARCH-repodata"
