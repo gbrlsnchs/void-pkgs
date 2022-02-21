@@ -1,7 +1,6 @@
 # Move packages to dist directory.
-repo_branch="pages"
-git fetch
-git checkout $repo_branch || exit 1
+echo "$(git rev-parse HEAD)" > "$LAST_DEPLOY_COMMIT_PATH"
+git fetch && git checkout "$PAGES_BRANCH" || exit 1
 
 case "$ARCH" in
     *musl* ) libc="musl" ;;
@@ -171,7 +170,9 @@ cat << EOF >> "$libc/index.html"
 </body>
 </html>
 EOF
-git add index.html $libc
+
+cat "$LAST_DEPLOY_COMMIT_PATH" > "$LAST_DEPLOY_COMMIT_FILE"
+git add index.html "$libc" "$LAST_DEPLOY_COMMIT_FILE"
 
 # Let's check whether we need to update the repository. If srcpkgs were updated, then it's
 # improbable that their HTML files won't also be updated.
@@ -185,5 +186,5 @@ git commit --amend --no-edit
 git remote set-url origin "https://${GITLAB_USER_LOGIN}:${ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git"
 
 echo "Pushing to $(git remote get-url origin)..."
-git push --set-upstream --force --quiet origin $repo_branch || exit 1
+git push --set-upstream --force --quiet origin "$PAGES_BRANCH" || exit 1
 echo "Done!!!"
