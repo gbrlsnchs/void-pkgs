@@ -35,7 +35,10 @@ prepare_pkgs:
         - common/deploy.sh
       variables:
         DEPLOYMENT_ONLY: "true"
+  image: voidlinux/voidlinux
   script:
+    - xbps-install --sync --update --yes
+    - xbps-install --yes git
     - ./common/prepare.sh
     - cp --recursive --force --no-target-directory /tmp "$ARTIFACTS_PATH"
   artifacts:
@@ -78,11 +81,14 @@ update_deployment_pivot:
   rules:
     - exists: 
       - $ARTIFACTS_PATH/$LAST_DEPLOYMENT_COMMIT_PATH
+  image: voidlinux/voidlinux
   script:
-    - 'rm -rf /tmp && mv --force "$ARTIFACTS_PATH" /tmp'
+    - xbps-install --sync --update --yes
+    - xbps-install --yes git
+    - rm -rf /tmp && mv --force "$ARTIFACTS_PATH" /tmp
     - 'cat "$LAST_DEPLOYMENT_COMMIT_PATH" > "$LAST_DEPLOYMENT_COMMIT_FILE"'
     - 'git config --global user.name "GitLab CI (job #$CI_JOB_ID)"'
-    - 'git config --global user.email "$GITLAB_USER_EMAIL"'
-    - 'git add "$LAST_DEPLOYMENT_COMMIT_FILE"'
-    - 'git commit --message "Update deployment checkpoint"'
-    - 'git push --force --quiet origin "$PAGES_BRANCH" || exit 1'
+    - git config --global user.email "$GITLAB_USER_EMAIL"
+    - git add "$LAST_DEPLOYMENT_COMMIT_FILE"
+    - git commit --message "Update deployment checkpoint"
+    - git push --force --quiet origin "$PAGES_BRANCH" || exit 1
