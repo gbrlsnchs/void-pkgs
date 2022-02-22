@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  gitea:
+    image: gitea/gitea:1.16.0
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    volumes:
+      - ./.vcs:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+
+  woodpecker-server:
+    image: woodpeckerci/woodpecker-server:v0.15.0-rc2-alpine
+    expose:
+      - "9000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./.ci:/var/lib/woodpecker/
+    environment:
+      - WOODPECKER_OPEN=true
+      - WOODPECKER_ADMIN=gbrlsnchs
+      - WOODPECKER_HOST=http://localhost:8000
+      - WOODPECKER_GITEA=true
+      - WOODPECKER_GITEA_URL=http://localhost:3000
+      - WOODPECKER_GITEA_CLIENT=${WOODPECKER_GITEA_CLIENT}
+      - WOODPECKER_GITEA_SECRET=${WOODPECKER_GITEA_SECRET}
+      - WOODPECKER_GITEA_SKIP_VERIFY=true
+    network_mode: "host"
+
+  woodpecker-agent:
+    image: woodpeckerci/woodpecker-agent:v0.15.0-rc2-alpine
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WOODPECKER_SERVER=woodpecker-server:9000
+      - WOODPECKER_MAX_PROCS=2
+    depends_on: 
+      - woodpecker-server
+    network_mode: "host"
