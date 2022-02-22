@@ -35,7 +35,7 @@ prepare_pkgs:
         - common/deploy.sh
       variables:
         DEPLOYMENT_ONLY: "true"
-  image: ghcr.io/void-linux/void-linux:20210220rc01-thin-x86_64
+  image: ghcr.io/void-linux/void-linux:20210220rc01-full-x86_64
   script:
     - xbps-install --sync --update --yes
     - xbps-install --yes git
@@ -81,7 +81,7 @@ update_deployment_pivot:
   rules:
     - exists: 
       - $ARTIFACTS_PATH/$LAST_DEPLOYMENT_COMMIT_PATH
-  image: ghcr.io/void-linux/void-linux:20210220rc01-thin-x86_64
+  image: ghcr.io/void-linux/void-linux:20210220rc01-full-x86_64
   script:
     - xbps-install --sync --update --yes
     - xbps-install --yes git
