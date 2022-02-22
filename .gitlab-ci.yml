@@ -1,6 +1,7 @@
 stages:
+  - prepare
   - publish
-  - update_ref
+  - update
 
 workflow:
   rules:
@@ -16,6 +17,30 @@ variables:
   LAST_DEPLOYMENT_COMMIT_FILE: last_deployment_commit
   LAST_DEPLOYMENT_COMMIT_PATH: /tmp/last_deployment_commit
   PAGES_BRANCH: pages
+  ARTIFACTS_PATH: artifacts
+
+prepare_pkgs:
+  stage: prepare
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - common/*.yml
+        - common/prepare.sh
+        - common/build.sh
+      variables:
+        IS_CI_UPDATE: "true"
+    - changes:
+        - srcpkgs/**/*
+    - changes:
+        - common/deploy.sh
+      variables:
+        DEPLOYMENT_ONLY: "true"
+  script:
+    - ./common/prepare.sh
+    - cp --recursive --force --no-target-directory /tmp "$ARTIFACTS_PATH"
+  artifacts:
+    paths:
+      - $ARTIFACTS_PATH
 
 .publish_template:
   stage: publish
@@ -38,20 +63,26 @@ variables:
   script:
     - xbps-install --sync --update --yes
     - xbps-install --yes git
-    - git fetch
-    - ./common/prepare.sh
+    - rm -rf /tmp && mv --force "$ARTIFACTS_PATH" /tmp
     - ./common/build.sh
     - ./common/deploy.sh
+    - cp --recursive --force --no-target-directory /tmp "$ARTIFACTS_PATH"
+  artifacts:
+    paths:
+      - $ARTIFACTS_PATH
 
 include: common/*.yml
 
 update_deployment_pivot:
-  stage: update_ref
+  stage: update
   rules:
     - exists: 
-      - $LAST_DEPLOYMENT_COMMIT_PATH
+      - $ARTIFACTS_PATH/$LAST_DEPLOYMENT_COMMIT_PATH
   script:
-    - cat "$LAST_DEPLOYMENT_COMMIT_PATH" > "$LAST_DEPLOYMENT_COMMIT_FILE"
-    - git add "$LAST_DEPLOYMENT_COMMIT_FILE"
-    - git commit --message "Update deployment checkpoint"
-    - git push --force --quiet origin "$PAGES_BRANCH" || exit 1
+    - 'rm -rf /tmp && mv --force "$ARTIFACTS_PATH" /tmp'
+    - 'cat "$LAST_DEPLOYMENT_COMMIT_PATH" > "$LAST_DEPLOYMENT_COMMIT_FILE"'
+    - 'git config --global user.name "GitLab CI (job #$CI_JOB_ID)"'
+    - 'git config --global user.email "$GITLAB_USER_EMAIL"'
+    - 'git add "$LAST_DEPLOYMENT_COMMIT_FILE"'
+    - 'git commit --message "Update deployment checkpoint"'
+    - 'git push --force --quiet origin "$PAGES_BRANCH" || exit 1'

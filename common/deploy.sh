@@ -1,7 +1,3 @@
-# Move packages to dist directory.
-git rev-parse HEAD > "$LAST_DEPLOYMENT_COMMIT_PATH"
-git switch "$PAGES_BRANCH" || exit 1
-
 case "$ARCH" in
     *musl* ) libc="musl" ;;
     * ) libc="glibc" ;;

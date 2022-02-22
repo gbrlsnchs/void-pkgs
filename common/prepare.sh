@@ -9,7 +9,7 @@ for file in "$ADDED_PATH" "$MODIFIED_PATH" "$DELETED_PATH" "$REBUILD_PATH"; do
 done
 
 # Get last deploy commit information from the deployment branch.
-git restore --source "origin/$PAGES_BRANCH" -- "$LAST_DEPLOYMENT_COMMIT_FILE" || exit 1
+git fetch && git restore --source "origin/$PAGES_BRANCH" -- "$LAST_DEPLOYMENT_COMMIT_FILE" || exit 1
 mv "$LAST_DEPLOYMENT_COMMIT_FILE" "$LAST_DEPLOYMENT_COMMIT_PATH"
 
 last_deploy_commit="$(cat "$LAST_DEPLOYMENT_COMMIT_PATH")"
@@ -44,3 +44,7 @@ if [ "$IS_CI_UPDATE" == "true" ]; then
 		| tee "$REBUILD_PATH" \
 		| sed "s/^/  * /"
 fi
+
+# Move packages to dist directory.
+git rev-parse HEAD > "$LAST_DEPLOYMENT_COMMIT_PATH"
+git switch "$PAGES_BRANCH" || exit 1
