@@ -31,6 +31,7 @@ services:
       - WOODPECKER_GITEA_CLIENT=${WOODPECKER_GITEA_CLIENT}
       - WOODPECKER_GITEA_SECRET=${WOODPECKER_GITEA_SECRET}
       - WOODPECKER_GITEA_SKIP_VERIFY=true
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
     network_mode: "host"
 
   woodpecker-agent:
@@ -38,8 +39,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - WOODPECKER_SERVER=woodpecker-server:9000
+      - WOODPECKER_SERVER=localhost:9000
       - WOODPECKER_MAX_PROCS=2
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
     depends_on: 
       - woodpecker-server
     network_mode: "host"
