@@ -3,7 +3,9 @@
 git fetch && git restore --source "origin/ci" -- "commit_index"
 
 commit_index="$(cat commit_index)"
-commit_index="${commit_index:-"$CI_COMMIT_SHA"}"
+commit_index="${commit_index:-"$CI_PREV_COMMIT_SHA"}"
+
+echo "$commit_index" > commit_index
 
 for file in "added" "modified" "deleted"; do
 	action=$(basename $file)
