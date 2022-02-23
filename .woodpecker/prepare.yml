@@ -1,0 +1,23 @@
+pipeline:
+  list:
+    image: "ghcr.io/void-linux/void-linux:20210220rc01-thin-x86_64"
+    commands:
+      - "xbps-install --sync --update --yes"
+      - "xbps-install --yes git"
+      - "./common/woodpecker/list.sh"
+  list_rebuild:
+    when:
+      path: [".woodpecker/*", "common/woodpecker/**/*"]
+    image: "ghcr.io/void-linux/void-linux:20210220rc01-thin-x86_64"
+    commands:
+      - "xbps-install --sync --update --yes"
+      - "xbps-install --yes git"
+      - "./common/woodpecker/list_rebuild.sh"
+  commit:
+    image: "ghcr.io/void-linux/void-linux:20210220rc01-thin-x86_64"
+    commands:
+      - "xbps-install --sync --update --yes"
+      - "xbps-install --yes git"
+      - "./common/woodpecker/commit.sh 'Prepare packages to build' ci"
+
+branches: ["trunk"]
