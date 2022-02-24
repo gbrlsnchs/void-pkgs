@@ -6,16 +6,15 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
-      - GITEA__server__HOST_PORT=3333
+      - GITEA__server__DOMAIN=${GITEA_IP}
+      - GITEA__server__ROOT_URL=http://${GITEA_IP}:3000
       - GITEA__webhook__ALLOWED_HOST_LIST=private
     volumes:
       - ./.vcs:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    ports:
-      - "3000:3000"
     networks:
-      public:
+      ci_net:
         ipv4_address: ${GITEA_IP}
 
   woodpecker-server:
@@ -24,7 +23,7 @@ services:
       - ./.ci:/var/lib/woodpecker/
     environment:
       - WOODPECKER_OPEN=true
-      - WOODPECKER_ADMIN=gbrlsnchs
+      - WOODPECKER_ADMIN=${WOODPECKER_ADMIN}
       - WOODPECKER_HOST=http://${WOODPECKER_IP}:8000
       - WOODPECKER_GITEA=true
       - WOODPECKER_GITEA_URL=http://${GITEA_IP}:3000
@@ -32,12 +31,9 @@ services:
       - WOODPECKER_GITEA_SECRET=${WOODPECKER_GITEA_SECRET}
       - WOODPECKER_GITEA_SKIP_VERIFY=true
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
-    ports:
-      - "8000:8000"
     networks:
-      public:
+      ci_net:
         ipv4_address: ${WOODPECKER_IP}
-      private:
 
   woodpecker-agent:
     image: woodpeckerci/woodpecker-agent:v0.15.0-rc2-alpine
@@ -50,11 +46,10 @@ services:
     depends_on: 
       - woodpecker-server
     networks:
-      private:
+      ci_net:
 
 networks:
-  public:
+  ci_net:
     ipam:
       config:
         - subnet: ${SUBNET}
-  private:
