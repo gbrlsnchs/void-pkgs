@@ -6,7 +6,6 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
-      - GITEA__server__DOMAIN=${GITEA_IP}
       - GITEA__server__ROOT_URL=http://${GITEA_IP}:3000
       - GITEA__webhook__ALLOWED_HOST_LIST=private
     volumes:
@@ -18,7 +17,7 @@ services:
         ipv4_address: ${GITEA_IP}
 
   woodpecker-server:
-    image: woodpeckerci/woodpecker-server:v0.15.0-rc2-alpine
+    image: woodpeckerci/woodpecker-server:v0.15.0
     volumes:
       - ./.ci:/var/lib/woodpecker/
     environment:
@@ -30,21 +29,23 @@ services:
       - WOODPECKER_GITEA_CLIENT=${WOODPECKER_GITEA_CLIENT}
       - WOODPECKER_GITEA_SECRET=${WOODPECKER_GITEA_SECRET}
       - WOODPECKER_GITEA_SKIP_VERIFY=true
+      - WOODPECKER_AUTHENTICATE_PUBLIC_REPOS=true
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
     networks:
       ci_net:
         ipv4_address: ${WOODPECKER_IP}
 
   woodpecker-agent:
-    image: woodpeckerci/woodpecker-agent:v0.15.0-rc2-alpine
+    image: woodpeckerci/woodpecker-agent:v0.15.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - WOODPECKER_SERVER=woodpecker-server:9000
-      - WOODPECKER_MAX_PROCS=2
+      - WOODPECKER_AGENT_HEALTHCHECK=false
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
     depends_on: 
       - woodpecker-server
+    restart: always
     networks:
       ci_net:
 
