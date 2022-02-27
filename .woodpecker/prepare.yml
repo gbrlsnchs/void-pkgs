@@ -25,3 +25,5 @@ pipeline:
       - "./common/woodpecker/commit.sh 'Prepare packages to build' ci"
 
 branches: ["trunk"]
+networks:
+  ci_vcs:
