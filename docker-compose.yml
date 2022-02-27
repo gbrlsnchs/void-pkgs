@@ -13,7 +13,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     networks:
-      ci_net:
+      ci_vcs:
         ipv4_address: ${GITEA_IP}
 
   woodpecker-server:
@@ -32,7 +32,7 @@ services:
       - WOODPECKER_AUTHENTICATE_PUBLIC_REPOS=true
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
     networks:
-      ci_net:
+      ci_vcs:
         ipv4_address: ${WOODPECKER_IP}
 
   woodpecker-agent:
@@ -47,10 +47,10 @@ services:
       - woodpecker-server
     restart: always
     networks:
-      ci_net:
+      ci_vcs:
 
 networks:
-  ci_net:
+  ci_vcs:
     ipam:
       config:
         - subnet: ${SUBNET}
