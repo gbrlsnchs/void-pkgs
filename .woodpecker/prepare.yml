@@ -1,10 +1,10 @@
 pipeline:
   set_remote:
-    image: "ghcr.io/void-linux/void-linux:20210220rc01-thin-x86_64"
+    image: "ghcr.io/void-linux/void-linux:20210220rc01-full-x86_64"
     commands:
       - "./common/woodpecker/set_remote.sh"
   list:
-    image: "ghcr.io/void-linux/void-linux:20210220rc01-thin-x86_64"
+    image: "ghcr.io/void-linux/void-linux:20210220rc01-full-x86_64"
     commands:
       - "xbps-install --sync --update --yes"
       - "xbps-install --yes git"
@@ -12,13 +12,13 @@ pipeline:
   list_rebuild:
     when:
       path: [".woodpecker/*", "common/woodpecker/**/*"]
-    image: "ghcr.io/void-linux/void-linux:20210220rc01-thin-x86_64"
+    image: "ghcr.io/void-linux/void-linux:20210220rc01-full-x86_64"
     commands:
       - "xbps-install --sync --update --yes"
       - "xbps-install --yes git"
       - "./common/woodpecker/list_rebuild.sh"
   commit:
-    image: "ghcr.io/void-linux/void-linux:20210220rc01-thin-x86_64"
+    image: "ghcr.io/void-linux/void-linux:20210220rc01-full-x86_64"
     commands:
       - "xbps-install --sync --update --yes"
       - "xbps-install --yes git"
