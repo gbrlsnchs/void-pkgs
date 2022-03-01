@@ -3,7 +3,7 @@ pipeline:
     image: "debian:sid"
     commands:
       - "apt-get update"
-      - "apt-get install git"
+      - "apt-get install --yes git"
       - "./common/woodpecker/list.sh"
   list_rebuild:
     when:
@@ -15,7 +15,7 @@ pipeline:
     image: "debian:sid"
     commands:
       - "apt-get update"
-      - "apt-get install git"
+      - "apt-get install --yes git"
       - "./common/woodpecker/set_remote.sh"
       - "./common/woodpecker/commit.sh 'Prepare packages to build' ci"
     secrets: ["access_token"]
