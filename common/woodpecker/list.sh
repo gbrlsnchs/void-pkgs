@@ -20,8 +20,8 @@ for file in "added" "modified" "deleted"; do
 		--name-only \
 		--no-rename \
 		--diff-filter "$filter" \
-		"$commit_index" -- trunk \
-		"srcpkgs/*" \
+		"$commit_index" trunk \
+		-- "srcpkgs/*" \
 		| cut --delimiter / --fields 2 \
 		| uniq \
 		| tee "$file" \
