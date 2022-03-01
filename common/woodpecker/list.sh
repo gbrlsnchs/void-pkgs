@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git fetch && git restore --source "origin/ci" -- "commit_index"
+git fetch && git restore --source origin/ci -- commit_index
 
 commit_index="$(cat commit_index)"
 commit_index="${commit_index:-"$CI_PREV_COMMIT_SHA"}"
@@ -9,7 +9,7 @@ echo "$commit_index" > commit_index
 
 tip="$(git rev-parse HEAD)"
 
-for file in "added" "modified" "deleted"; do
+for file in added modified deleted; do
 	action=$(basename $file)
 	echo "List of packages to be $action":
 
