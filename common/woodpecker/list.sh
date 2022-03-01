@@ -7,6 +7,8 @@ commit_index="${commit_index:-"$CI_PREV_COMMIT_SHA"}"
 
 echo "$commit_index" > commit_index
 
+tip="$(git rev-parse HEAD)"
+
 for file in "added" "modified" "deleted"; do
 	action=$(basename $file)
 	echo "List of packages to be $action":
@@ -20,7 +22,7 @@ for file in "added" "modified" "deleted"; do
 		--name-only \
 		--no-rename \
 		--diff-filter "$filter" \
-		"$commit_index" trunk \
+		"$commit_index" "$tip" \
 		-- "srcpkgs/*" \
 		| cut --delimiter / --fields 2 \
 		| uniq \
