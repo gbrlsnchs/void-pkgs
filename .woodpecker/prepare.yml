@@ -1,29 +1,22 @@
 pipeline:
-  set_remote:
-    image: "alpine:3.15.0"
-    commands:
-      - "apk update"
-      - "apk add git"
-      - "./common/woodpecker/set_remote.sh"
   list:
-    image: "alpine:3.15.0"
+    image: "debian:sid"
     commands:
-      - "apk update"
-      - "apk add git"
+      - "apt-get update"
+      - "apt-get install git"
       - "./common/woodpecker/list.sh"
   list_rebuild:
     when:
       path: [".woodpecker/*", "common/woodpecker/**/*"]
-    image: "alpine:3.15.0"
+    image: "debian:sid"
     commands:
-      - "apk update"
-      - "apk add git"
       - "./common/woodpecker/list_rebuild.sh"
   commit:
-    image: "alpine:3.15.0"
+    image: "debian:sid"
     commands:
-      - "apk update"
-      - "apk add git"
+      - "apt-get update"
+      - "apt-get install git"
+      - "./common/woodpecker/set_remote.sh"
       - "./common/woodpecker/commit.sh 'Prepare packages to build' ci"
 
 branches: ["trunk"]
