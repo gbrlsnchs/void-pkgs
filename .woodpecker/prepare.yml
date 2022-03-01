@@ -2,6 +2,8 @@ pipeline:
   set_remote:
     image: "ghcr.io/void-linux/void-linux:20210220rc01-full-x86_64"
     commands:
+      - "xbps-install --sync --update --yes"
+      - "xbps-install --yes git"
       - "./common/woodpecker/set_remote.sh"
   list:
     image: "ghcr.io/void-linux/void-linux:20210220rc01-full-x86_64"
