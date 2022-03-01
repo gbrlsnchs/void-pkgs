@@ -3,7 +3,7 @@
 title="$1"
 branch="${2:-"pages"}"
 
-git switch "$branch" || git switch --create "$branch"
+git switch --create "$branch" && git branch --set-upstream-to "origin/$branch"
 git config --global user.name "$CI_COMMIT_AUTHOR"
 git config --global user.email "$CI_COMMIT_AUTHOR_EMAIL"
 git add --all && git commit --file - <<EOF
