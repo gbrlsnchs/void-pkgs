@@ -18,5 +18,6 @@ pipeline:
       - "apt-get install git"
       - "./common/woodpecker/set_remote.sh"
       - "./common/woodpecker/commit.sh 'Prepare packages to build' ci"
+    secrets: ["access_token"]
 
 branches: ["trunk"]
