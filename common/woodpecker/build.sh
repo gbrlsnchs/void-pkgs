@@ -36,6 +36,6 @@ for pkg in $build_pkgs; do
 	echo "Finished building package \"$pkg\"!"
 done
 
-git fetch && git worktree add pre
+git fetch pre:pre && git worktree add pre
 mkdir --parents pre/"$LIBC"
 cp --force "$upstream_dir"/hostdir/binpkgs/* pre/"$LIBC"
