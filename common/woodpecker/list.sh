@@ -1,12 +1,8 @@
 #!/bin/sh
 
-git fetch && git restore --source origin/ci -- commit_index
+git fetch && git worktree add ci
 
-commit_index="$(cat commit_index)"
-commit_index="${commit_index:-"$CI_PREV_COMMIT_SHA"}"
-
-echo "$commit_index" > commit_index
-
+commit_index="$(cat ci/commit_index)"
 tip="$(git rev-parse HEAD)"
 
 for file in added modified deleted; do
@@ -26,6 +22,6 @@ for file in added modified deleted; do
 		-- "srcpkgs/*" \
 		| cut --delimiter / --fields 2 \
 		| uniq \
-		| tee "$file" \
+		| tee "ci/$file" \
 		| sed "s/^/  * /"
 done
