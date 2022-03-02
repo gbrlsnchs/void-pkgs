@@ -3,6 +3,7 @@
 title="$1"
 workdir="${2:-"$(pwd)"}"
 
+echo "Using \"$workdir\" as commit directory"
 cd "$workdir"
 
 branch="$(basename "$workdir")"
@@ -11,6 +12,8 @@ git remote set-url origin "https://$CI_REPO_OWNER:$ACCESS_TOKEN@codeberg.org/$CI
 git config --global user.name "$CI_COMMIT_AUTHOR"
 git config --global user.email "$CI_COMMIT_AUTHOR_EMAIL"
 
+echo "Changes:"
+git status --short --ignore-submodules=dirty
 git add --all && git commit --file - <<EOF
 $title
 
