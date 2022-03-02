@@ -10,7 +10,7 @@ fi
 
 git fetch ci:ci && git worktree add ci
 
-eligible_pkgs=$(find srcpkgs -maxdepth 1 -path "srcpkgs/*" | grep --invert-match --file deleted)
+eligible_pkgs=$(find srcpkgs -maxdepth 1 -path "srcpkgs/*" | grep --invert-match --file ci/deleted)
 echo "The following custom packages will be used alongside upstream packages:"
 echo "$eligible_pkgs" | sed "s/^/  * /"
 
