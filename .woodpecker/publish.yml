@@ -17,4 +17,4 @@ pipeline:
       - "./common/woodpecker/commit.sh 'Prepare compiled binaries to get published' pre"
     secrets: ["access_token"]
 
-branches: ["ci"]
+depends_on: ["prepare"]

@@ -1,5 +1,3 @@
-git switch trunk || exit 1
-
 upstream_dir="$(pwd)/upstream"
 
 if [ ! -d "$upstream_dir" ]; then
