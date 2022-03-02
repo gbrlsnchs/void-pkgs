@@ -15,5 +15,6 @@ pipeline:
       - "xbps-install --yes git"
       - "./common/woodpecker/build.sh"
       - "./common/woodpecker/commit.sh 'Prepare compiled binaries to get published' pre"
+    secrets: ["access_token"]
 
 branches: ["ci"]
