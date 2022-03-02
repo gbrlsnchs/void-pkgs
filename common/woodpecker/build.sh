@@ -9,7 +9,7 @@ eligible_pkgs=$(find srcpkgs -maxdepth 1 -path "srcpkgs/*" | grep --invert-match
 echo "The following custom packages will be used alongside upstream packages:"
 echo "$eligible_pkgs" | sed "s/^/  * /"
 
-for src in "$eligible_pkgs"; do
+for src in $eligible_pkgs; do
 	dst="$upstream_dir"/"$src"
 
 	echo "Copying $src to $dst"
