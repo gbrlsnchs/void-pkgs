@@ -16,7 +16,7 @@ pipeline:
     commands:
       - "apt-get update"
       - "apt-get install --yes git"
-      - "git fetch && git worktree add pre && rm --recursive --force pre/*"
+      - "git fetch && git checkout pre && git checkout trunk && git worktree add pre && rm --recursive --force pre/*"
       - "./common/woodpecker/commit.sh 'Clean up old binaries' pre"
     secrets: ["access_token"]
   commit:
