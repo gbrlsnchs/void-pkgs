@@ -3,7 +3,7 @@ upstream_dir="$(pwd)/upstream"
 echo "Cloning upstream packages to $upstream_dir"
 git clone --depth 1 git://github.com/void-linux/void-packages.git "$upstream_dir" || exit 1
 
-git fetch ci:ci && git worktree add ci
+git fetch origin ci:ci && git worktree add ci
 
 eligible_pkgs=$(find srcpkgs -maxdepth 1 -path "srcpkgs/*" | grep --invert-match --file ci/deleted)
 echo "The following custom packages will be used alongside upstream packages:"
@@ -31,6 +31,6 @@ for pkg in $build_pkgs; do
 	echo "Finished building package \"$pkg\"!"
 done
 
-git fetch pre:pre && git worktree add pre
+git fetch origin pre:pre && git worktree add pre
 mkdir --parents pre/"$LIBC"
 cp --force "$upstream_dir"/hostdir/binpkgs/* pre/"$LIBC"
