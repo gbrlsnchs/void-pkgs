@@ -24,6 +24,8 @@ pipeline:
     commands:
       - "apt-get update"
       - "apt-get install --yes git"
+      - echo "I am at $(pwd)"
+      - ls
       - "./common/woodpecker/commit.sh 'Prepare packages to build' ci"
     secrets: ["access_token"]
 
