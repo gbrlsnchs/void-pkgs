@@ -16,8 +16,8 @@ eligible_pkgs=$(find srcpkgs -maxdepth 1 -path "srcpkgs/*" | grep --invert-match
 echo "The following custom packages will be used alongside upstream packages:"
 echo "$eligible_pkgs" | sed "s/^/  * /"
 
-for src in $eligible_pkgs; do
-	dst="$upstream_dir/$src"
+for src in "$eligible_pkgs"; do
+	dst="$upstream_dir"/"$src"
 
 	echo "Copying $src to $dst"
 	cp --no-target-directory --recursive --force "$src" "$dst"
@@ -38,7 +38,6 @@ for pkg in $build_pkgs; do
 	echo "Finished building package \"$pkg\"!"
 done
 
-mkdir --parents tmp/"$LIBC"
-cp --force "$upstream_dir"/hostdir/binpkgs/* tmp/"$LIBC"
 git fetch && git worktree add pre
-cp --recursive --no-target-directory tmp/"$LIBC" pre/"$LIBC"
+mkdir --parents pre/"$LIBC"
+cp --force "$upstream_dir"/hostdir/binpkgs/* pre/"$LIBC"

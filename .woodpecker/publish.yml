@@ -6,7 +6,6 @@ matrix:
     - ARCH: "x86_64-musl"
       BOOTSTRAP_ARCH: "x86_64-musl"
       LIBC: "musl"
-    - PUSH: true
 
 pipeline:
   package:
@@ -15,16 +14,6 @@ pipeline:
       - "xbps-install --sync --update --yes"
       - "xbps-install --yes git"
       - "./common/woodpecker/build.sh"
-      - "./common/woodpecker/sign_pkgs.sh"
-  push:
-    when:
-      matrix:
-        - PUSH: true
-    image: "debian:sid"
-    commands:
-      - "apt-get update"
-      - "apt-get install git --yes"
       - "./common/woodpecker/commit.sh 'Prepare compiled binaries to get published' pre"
-    secrets: ["access_token"]
 
 branches: ["ci"]

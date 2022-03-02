@@ -1,8 +1,11 @@
 #!/bin/sh
 
 title="$1"
-cwd="${2:-"$(pwd)"}"
-branch="$(basename "$cwd")"
+workdir="${2:-"$(pwd)"}"
+
+cd "$workdir"
+
+branch="$(basename "$workdir")"
 
 git remote set-url origin "https://$CI_REPO_OWNER:$ACCESS_TOKEN@codeberg.org/$CI_REPO.git"
 git config --global user.name "$CI_COMMIT_AUTHOR"

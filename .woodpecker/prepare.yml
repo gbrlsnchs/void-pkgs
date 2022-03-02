@@ -11,6 +11,14 @@ pipeline:
     image: "debian:sid"
     commands:
       - "./common/woodpecker/list_rebuild.sh"
+  clean_pre:
+    image: "debian:sid"
+    commands:
+      - "apt-get update"
+      - "apt-get install --yes git"
+      - "git worktree add pre && rm --recursive --force pre/*"
+      - "./common/woodpecker/commit.sh 'Clean up old binaries' pre"
+    secrets: ["access_token"]
   commit:
     image: "debian:sid"
     commands:
