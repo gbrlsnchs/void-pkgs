@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git fetch && git worktree add ci
+git fetch origin ci:ci && git worktree add ci
 
 commit_index="$(cat ci/commit_index)"
 tip="$(git rev-parse HEAD)"
