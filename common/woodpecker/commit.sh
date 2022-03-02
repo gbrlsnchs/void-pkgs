@@ -8,6 +8,7 @@ cd "$workdir"
 
 branch="$(basename "$workdir")"
 
+git fetch
 git remote set-url origin "https://$CI_REPO_OWNER:$ACCESS_TOKEN@codeberg.org/$CI_REPO.git"
 git config --global user.name "$CI_COMMIT_AUTHOR"
 git config --global user.email "$CI_COMMIT_AUTHOR_EMAIL"
