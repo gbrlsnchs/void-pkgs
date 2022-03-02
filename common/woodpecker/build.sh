@@ -8,7 +8,7 @@ else
 	cd "$upstream_dir"
 fi
 
-git restore --source origin/ci -- added modified deleted rebuild
+git fetch ci:ci && git worktree add ci
 
 eligible_pkgs=$(find srcpkgs -maxdepth 1 -path "srcpkgs/*" | grep --invert-match --file deleted)
 echo "The following custom packages will be used alongside upstream packages:"
@@ -25,7 +25,7 @@ echo XBPS_CHROOT_CMD=ethereal >> "$upstream_dir/etc/conf"
 echo XBPS_ALLOW_CHROOT_BREAKOUT=yes >> "$upstream_dir/etc/conf"
 ln -s / "$upstream_dir/masterdir"
 
-build_pkgs=$("$upstream_dir/xbps-src" sort-dependencies "$(cat added modified rebuild)")
+build_pkgs=$("$upstream_dir/xbps-src" sort-dependencies "$(cat ci/added ci/modified ci/rebuild)")
 for pkg in $build_pkgs; do
 	echo "Building package \"$pkg...\""
 	if [ "$ARCH" != "$BOOTSTRAP_ARCH" ]; then
