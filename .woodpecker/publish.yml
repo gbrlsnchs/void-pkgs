@@ -12,7 +12,7 @@ pipeline:
     image: "ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-${BOOTSTRAP_ARCH}"
     commands:
       - "xbps-install --sync --update --yes"
-      - "xbps-install --yes git"
+      - "xbps-install --yes git openssh"
       - "./common/woodpecker/build.sh"
       - "./common/woodpecker/commit.sh 'Prepare compiled binaries to get published' pre"
     secrets: ["access_token"]
