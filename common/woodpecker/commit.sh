@@ -6,6 +6,9 @@ workdir="${2:-"$(pwd)"}"
 echo "Using \"$workdir\" as commit directory"
 cd "$workdir"
 
+echo "Inside \"$workdir\" there is:"
+ls -A
+
 branch="$(basename "$workdir")"
 
 git fetch
