@@ -1,12 +1,7 @@
 upstream_dir="$(pwd)/upstream"
 
-if [ ! -d "$upstream_dir" ]; then
-	echo "Cloning upstream packages to $upstream_dir"
-	git clone --depth 1 git://github.com/void-linux/void-packages.git "$upstream_dir" || exit 1
-else
-	echo "Updating upstream packages in $upstream_dir"
-	cd "$upstream_dir"
-fi
+echo "Cloning upstream packages to $upstream_dir"
+git clone --depth 1 git://github.com/void-linux/void-packages.git "$upstream_dir" || exit 1
 
 git fetch ci:ci && git worktree add ci
 
