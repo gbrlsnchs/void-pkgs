@@ -2,7 +2,7 @@
 
 title="$1"
 current_branch="$(git rev-parse --abbrev-ref HEAD)"
-target_branch="${1:-"$current_branch"}"
+target_branch="${2:-"$current_branch"}"
 
 if [ "$target_branch" != "$current_branch" ]; then
 	echo "Setting up worktree for branch \"$target_branch\"..."
