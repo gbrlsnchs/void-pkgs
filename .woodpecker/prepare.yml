@@ -7,7 +7,7 @@ pipeline:
       - "./common/woodpecker/list.sh"
   list_rebuild:
     when:
-      path: [".woodpecker/*", "common/woodpecker/**/*"]
+      path: [".woodpecker/*", "common/woodpecker/**/*", "scripts/*"]
     image: "debian:sid"
     commands:
       - "./common/woodpecker/list_rebuild.sh"
@@ -16,7 +16,6 @@ pipeline:
     commands:
       - "apt-get update"
       - "apt-get install --yes git"
-      - "./common/woodpecker/set_remote.sh"
       - "./common/woodpecker/commit.sh 'Prepare packages to build' ci"
     secrets: ["access_token"]
 
