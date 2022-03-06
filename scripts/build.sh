@@ -1,3 +1,5 @@
+#!/bin/sh
+
 upstream_dir="$(pwd)/upstream"
 
 echo "Cloning upstream packages to $upstream_dir"

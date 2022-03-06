@@ -4,26 +4,19 @@ pipeline:
     commands:
       - "apt-get update"
       - "apt-get install --yes git"
-      - "./common/woodpecker/list.sh"
-  list_rebuild:
+      - "./scripts/list.sh"
+  list-rebuild:
     when:
-      path: [".woodpecker/*", "common/woodpecker/**/*", "scripts/*"]
+      path: [".woodpecker/*", "scripts/*"]
     image: "debian:sid"
     commands:
-      - "./common/woodpecker/list_rebuild.sh"
-  clean_pre:
-    image: "debian:sid"
-    commands:
-      - "apt-get update"
-      - "apt-get install --yes git"
-      - "./common/woodpecker/commit.sh 'Clean up old binaries' pre"
-    secrets: ["access_token"]
+      - "./scripts/list_rebuild.sh"
   commit:
     image: "debian:sid"
     commands:
       - "apt-get update"
       - "apt-get install --yes git"
-      - "./common/woodpecker/commit.sh 'Prepare packages to build' ci"
+      - "./scripts/commit.sh 'Prepare packages to build' ci"
     secrets: ["access_token"]
 
 branches: ["trunk"]

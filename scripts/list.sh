@@ -2,7 +2,7 @@
 
 git fetch origin ci:ci && git worktree add ci
 
-commit_index="$(cat ci/commit_index)"
+base="$(cat ci/commit_index)"
 tip="$(git rev-parse HEAD)"
 
 for file in added modified deleted; do
@@ -18,10 +18,11 @@ for file in added modified deleted; do
 		--name-only \
 		--no-rename \
 		--diff-filter "$filter" \
-		"$commit_index" "$tip" \
-		-- "srcpkgs/*" \
+		"$base" "$tip" \
+		-- "srcpkgs/*/template" \
 		| cut --delimiter / --fields 2 \
-		| uniq \
-		| tee "ci/$file" \
+		| tee ci/"$file" \
 		| sed "s/^/  * /"
 done
+
+echo "$tip" > ci/next_index

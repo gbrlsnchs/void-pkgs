@@ -1,0 +1,12 @@
+pipeline:
+  build:
+    image: ghcr.io/void-linux/void-linux:20220211rc01-full-x86_64
+    commands:
+      - "xbps-install --sync --update --yes"
+      - "xbps-install --yes git openssh"
+      - "./scripts/sign.sh"
+      - "./scripts/generate_pages.sh"
+      - "./scripts/commit.sh /tmp/changelog_file"
+      - "./scripts/clean_up.sh"
+
+depends_on: ["publish"]
