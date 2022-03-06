@@ -8,5 +8,6 @@ pipeline:
       - "./scripts/generate_pages.sh"
       - "./scripts/commit.sh /tmp/changelog_file"
       - "./scripts/clean_up.sh"
+    secrets: ["access_token", "signing_key"]
 
-depends_on: ["publish"]
+depends_on: ["package"]
