@@ -14,7 +14,7 @@ pipeline:
       - "xbps-install --sync --update --yes"
       - "xbps-install --yes git openssh"
       - "./scripts/build.sh"
-      - './scripts/commit.sh "Prepare compiled binaries" "$LIBC"'
+      - './scripts/commit.sh "$LIBC: Prepare compiled binaries" pre'
     secrets: ["access_token"]
 
 depends_on: ["prepare"]
