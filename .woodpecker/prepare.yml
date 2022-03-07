@@ -5,7 +5,7 @@ pipeline:
       - "./scripts/list.sh"
   list-rebuild:
     when:
-      path: [".woodpecker/*", "scripts/*"]
+      path: [".woodpecker/*", "scripts/*", "container/*"]
     image: "gbrlsnchs/void-linux-ci"
     commands:
       - "./scripts/list_rebuild.sh"
