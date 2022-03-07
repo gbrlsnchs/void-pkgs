@@ -7,7 +7,11 @@ git fetch origin ci:ci && git worktree add /tmp/ci
 echo "$SIGNING_KEY" > /tmp/signing_key
 
 # Delete files related to the package in the current architecture.
-for libc in */; do
+for libc in *; do
+	if [ ! -d "$libc" ]; then
+		continue
+	fi
+
 	# Clean obsolete packages and existing repodata.
 	for pkg in $(cat /tmp/ci/modified /tmp/ci/deleted); do
 		rm --force "$libc/$pkg"-[0-9]*.[0-9]*.[0-9]*_[0-9]*.*.*
