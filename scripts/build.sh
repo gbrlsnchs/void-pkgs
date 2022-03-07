@@ -3,7 +3,7 @@
 upstream_dir="$(pwd)/upstream"
 
 echo "Cloning upstream packages to $upstream_dir"
-git clone --depth 1 git://github.com/void-linux/void-packages.git "$upstream_dir" || exit 1
+git clone --depth 1 https://github.com/void-linux/void-packages.git "$upstream_dir" || exit 1
 
 git fetch origin ci:ci && git worktree add ci
 
