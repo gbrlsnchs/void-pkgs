@@ -2,10 +2,8 @@ matrix:
   include:
     - ARCH: "x86_64"
       BOOTSTRAP_ARCH: "x86_64"
-      LIBC: "glibc"
     - ARCH: "x86_64-musl"
       BOOTSTRAP_ARCH: "x86_64-musl"
-      LIBC: "musl"
 
 pipeline:
   xbps-src:
@@ -14,7 +12,8 @@ pipeline:
       - "xbps-install --sync --update --yes"
       - "xbps-install --yes git openssh"
       - "./scripts/build.sh"
-      - './scripts/commit.sh "$LIBC: Prepare compiled binaries" pre'
-    secrets: ["access_token"]
+      - "./scripts/sign.sh"
+      - './scripts/commit.sh "$ARCH: Publish updates"'
+    secrets: ["access_token", "signing_key"]
 
 depends_on: ["prepare"]

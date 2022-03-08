@@ -1,5 +1,7 @@
 #!/bin/sh
 
+git fetch ci:ci && git worktree add ci /tmp/ci
+
 added_list=$(cat /tmp/ci/added | sed --regexp-extended "s/(.+)/  * \1/")
 modified_list=$(cat /tmp/ci/modified | sed --regexp-extended "s/(.+)/  * \1/")
 deleted_list=$(cat /tmp/ci/deleted | sed --regexp-extended "s/(.+)/  * \1/")
@@ -121,4 +123,3 @@ cat << EOF >> index.html
 </body>
 </html>
 EOF
-

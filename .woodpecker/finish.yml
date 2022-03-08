@@ -2,10 +2,9 @@ pipeline:
   publish:
     image: "gbrlsnchs/void-linux-ci"
     commands:
-      - "./scripts/sign.sh"
       - "./scripts/generate_pages.sh"
       - "./scripts/commit.sh /tmp/changelog_file"
       - "./scripts/clean_up.sh"
-    secrets: ["access_token", "signing_key"]
+    secrets: ["access_token"]
 
 depends_on: ["package"]

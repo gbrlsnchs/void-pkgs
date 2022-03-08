@@ -5,9 +5,9 @@ upstream_dir="$(pwd)/upstream"
 echo "Cloning upstream packages to $upstream_dir"
 git clone --depth 1 https://github.com/void-linux/void-packages.git "$upstream_dir" || exit 1
 
-git fetch origin ci:ci && git worktree add ci
+git fetch origin ci:ci && git worktree add ci /tmp/ci
 
-eligible_pkgs=$(find srcpkgs -maxdepth 1 -path "srcpkgs/*" | grep --invert-match --file ci/deleted)
+eligible_pkgs=$(find srcpkgs -maxdepth 1 -path "srcpkgs/*" | grep --invert-match --file /tmp/ci/deleted)
 echo "The following custom packages will be used alongside upstream packages:"
 echo "$eligible_pkgs" | sed "s/^/  * /"
 
@@ -22,7 +22,7 @@ echo XBPS_CHROOT_CMD=ethereal >> "$upstream_dir/etc/conf"
 echo XBPS_ALLOW_CHROOT_BREAKOUT=yes >> "$upstream_dir/etc/conf"
 ln -s / "$upstream_dir/masterdir"
 
-build_pkgs=$("$upstream_dir/xbps-src" sort-dependencies "$(cat ci/added ci/modified ci/rebuild)")
+build_pkgs=$("$upstream_dir/xbps-src" sort-dependencies "$(cat /tmp/ci/added /tmp/ci/modified /tmp/ci/rebuild)")
 for pkg in $build_pkgs; do
 	echo "Building package \"$pkg...\""
 	if [ "$ARCH" != "$BOOTSTRAP_ARCH" ]; then
@@ -32,7 +32,3 @@ for pkg in $build_pkgs; do
 	fi
 	echo "Finished building package \"$pkg\"!"
 done
-
-git fetch origin pre:pre && git worktree add pre
-mkdir --parents pre/"$LIBC"
-cp --force "$upstream_dir"/hostdir/binpkgs/* pre/"$LIBC"
