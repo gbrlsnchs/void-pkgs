@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git fetch origin pages:pages && git workspace add pages
+git fetch origin pages:pages && git worktree add pages
 
 echo "$SIGNING_KEY" > /tmp/signing_key
 
