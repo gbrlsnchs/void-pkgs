@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git fetch pages:pages && git switch pages
+git fetch origin pages:pages && git switch pages
 
 echo "$SIGNING_KEY" > /tmp/signing_key
 
