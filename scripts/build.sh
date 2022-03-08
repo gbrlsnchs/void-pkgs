@@ -23,9 +23,9 @@ build_pkgs=$(/tmp/upstream/xbps-src sort-dependencies "$(cat /tmp/ci/added /tmp/
 for pkg in $build_pkgs; do
 	echo "Building package \"$pkg...\""
 	if [ "$ARCH" != "$BOOTSTRAP_ARCH" ]; then
-		/tmp/upstream/xbps-src -a "$ARCH" -j "$(nproc)" pkg "$pkg" || exit 1
+		/tmp/upstream/xbps-src -a "$ARCH" -j "$(nproc)" pkg "$pkg" > /dev/null
 	else
-		/tmp/upstream/xbps-src -j "$(nproc)" pkg "$pkg" || exit 1
+		/tmp/upstream/xbps-src -j "$(nproc)" pkg "$pkg" > /dev/null
 	fi
 	echo "Finished building package \"$pkg\"!"
 done
