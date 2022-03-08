@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git fetch ci:ci && git worktree add ci /tmp/ci
+git fetch ci:ci && git worktree add /tmp/ci
 
 added_list=$(cat /tmp/ci/added | sed --regexp-extended "s/(.+)/  * \1/")
 modified_list=$(cat /tmp/ci/modified | sed --regexp-extended "s/(.+)/  * \1/")
