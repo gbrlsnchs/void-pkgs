@@ -1,6 +1,7 @@
 pipeline:
   list:
     image: "gbrlsnchs/void-linux-ci"
+    pull: true
     commands:
       - "./scripts/list.sh"
   list-rebuild:
