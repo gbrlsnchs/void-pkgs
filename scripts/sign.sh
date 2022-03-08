@@ -15,7 +15,7 @@ for pkg in $(cat /tmp/ci/modified /tmp/ci/deleted); do
 done
 
 # Copy new binaries over to correct directory.
-cp --force "$upstream_dir"/hostdir/binpkgs/* "$libc"
+cp --force /tmp/upstream/hostdir/binpkgs/* "$libc"
 
 # Sign the repository and its packages.
 export XBPS_TARGET_ARCH="$ARCH"
