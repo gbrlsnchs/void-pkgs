@@ -6,7 +6,7 @@ matrix:
       BOOTSTRAP_ARCH: "x86_64-musl"
 
 pipeline:
-  xbps-src:
+  build:
     image: "ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-${BOOTSTRAP_ARCH}"
     commands:
       - "xbps-install --sync --update --yes"

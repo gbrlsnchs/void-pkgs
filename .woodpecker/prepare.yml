@@ -10,7 +10,7 @@ pipeline:
     image: "gbrlsnchs/void-linux-ci"
     commands:
       - "./scripts/list_rebuild.sh"
-  commit:
+  commit-list:
     image: "gbrlsnchs/void-linux-ci"
     commands:
       - "./scripts/commit.sh 'Prepare packages to build' ci"
