@@ -1,6 +1,5 @@
 # My custom Void packages
-[![GitLab CI
-Pipeline](https://gitlab.com/gbrlsnchs/void-pkgs/badges/trunk/pipeline.svg)](https://gitlab.com/gbrlsnchs/void-pkgs/-/commits/trunk)
+[![Woodpecker CI](https://ci.codeberg.org/api/badges/gbrlsnchs/void-pkgs/status.svg)](https://codeberg.org/gbrlsnchs/void-pkgs/commits/branch/trunk)
 
 ## About
 This repository holds custom templates I have written for my personal use. They're picked by GitLab
