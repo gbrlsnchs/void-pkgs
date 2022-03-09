@@ -3,10 +3,10 @@
 git fetch origin ci:ci && git worktree add /tmp/ci
 git fetch origin pages:pages && git worktree add pages
 
-added_list=$(cat /tmp/ci/added | sed --regexp-extended "s/(.+)/  * \1/")
-modified_list=$(cat /tmp/ci/modified | sed --regexp-extended "s/(.+)/  * \1/")
-deleted_list=$(cat /tmp/ci/deleted | sed --regexp-extended "s/(.+)/  * \1/")
-rebuild_list=$(cat /tmp/ci/rebuild | sed --regexp-extended "s/(.+)/  * \1/")
+added_list=$(sed --regexp-extended "s/(.+)/  * \1/" < /tmp/ci/added)
+modified_list=$(sed --regexp-extended "s/(.+)/  * \1/" < /tmp/ci/modified)
+deleted_list=$(sed --regexp-extended "s/(.+)/  * \1/" < /tmp/ci/deleted)
+rebuild_list=$(sed --regexp-extended "s/(.+)/  * \1/" < /tmp/ci/rebuild)
 
 added_list=${added_list:-"  (none)"}
 modified_list=${modified_list:-"  (none)"}
