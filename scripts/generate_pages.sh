@@ -101,7 +101,7 @@ th, td {
 EOF
 	for file in "$libc"/*.xbps; do
 		path="$(basename "$file")"
-		if [ "$path" == "index.html" ]; then
+		if [ "$path" = "index.html" ]; then
 			continue
 		fi
 
