@@ -3,7 +3,7 @@ pipeline:
     image: "gbrlsnchs/void-linux-ci"
     commands:
       - "./scripts/generate_pages.sh"
-      - "./scripts/commit.sh /tmp/changelog_file"
+      - "./scripts/commit.sh /tmp/changelog_file pages"
       - "./scripts/clean_up.sh"
     secrets: ["access_token"]
 

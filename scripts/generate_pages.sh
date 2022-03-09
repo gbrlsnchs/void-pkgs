@@ -1,6 +1,7 @@
 #!/bin/sh
 
 git fetch origin ci:ci && git worktree add /tmp/ci
+git fetch origin pages:pages && git worktree add pages
 
 added_list=$(cat /tmp/ci/added | sed --regexp-extended "s/(.+)/  * \1/")
 modified_list=$(cat /tmp/ci/modified | sed --regexp-extended "s/(.+)/  * \1/")
@@ -28,9 +29,10 @@ $deleted_list
 Packages that have been rebuilt:
 $rebuild_list
 EOF
+changelog_msg="$(cat "$changelog_file")"
 
 # Update templates
-cat << EOF > index.html
+cat << EOF > pages/index.html
 <html>
 <head>
 <title>$CI_REPO_OWNER's personal XBPS binary repository</title>
@@ -61,14 +63,18 @@ pre {
 </thead>
 <tbody>
 EOF
-for libc in */; do
+for libc in pages/*; do
+	if [ ! -d "$libc" ]; then
+		continue
+	fi
+
 	path=$(basename "$libc")
 	last_update=$(git --no-pager log -1 --format="%ad" -- "$libc")
 
 	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td>%s</td></tr>' \
-		"$path" "$path" "$(du --human-readable "$libc" | cut --fields 1)" "$last_update" >> index.html
+		"$path" "$path" "$(du --human-readable "$libc" | cut --fields 1)" "$last_update" >> pages/index.html
 
-	cat << EOF > "$libc/index.html"
+	cat << EOF > "$libc"/index.html
 <html>
 <head>
 <title>$CI_REPO_OWNER's custom Void packages - $libc</title>
@@ -94,7 +100,7 @@ th, td {
 <tbody>
 EOF
 	for file in "$libc"/*.xbps; do
-		path=$(basename $file)
+		path="$(basename "$file")"
 		if [ "$path" == "index.html" ]; then
 			continue
 		fi
@@ -115,7 +121,7 @@ EOF
 </html>
 EOF
 done
-cat << EOF >> index.html
+cat << EOF >> pages/index.html
 </tbody>
 </table>
 <h1>Latest Changelog</h1>
