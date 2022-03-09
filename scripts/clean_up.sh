@@ -1,7 +1,7 @@
 #!/bin/sh
 
 git worktree remove /tmp/ci
-git switch ci
+git fetch origin ci:ci && git switch ci
 commit_index="$(cat next_index)"
 
 git switch --orphan tmp_ci
