@@ -11,7 +11,7 @@ rebuild_list=$(sed --regexp-extended "s/(.+)/  * \1/" < /tmp/ci/rebuild)
 added_list=${added_list:-"  (none)"}
 modified_list=${modified_list:-"  (none)"}
 deleted_list=${deleted_list:-"  (none)"}
-rebuild_list=${rebuilt_list:-"  (none)"}
+rebuild_list=${rebuild_list:-"  (none)"}
 
 cat << EOF > /tmp/changelog
 Deploy packages for $libc
