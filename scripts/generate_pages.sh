@@ -31,7 +31,8 @@ EOF
 changelog_msg="$(cat /tmp/changelog)"
 
 # Update templates
-cat << EOF > pages/index.html
+cd pages
+cat << EOF > index.html
 <html>
 <head>
 <title>$CI_REPO_OWNER's personal XBPS binary repository</title>
@@ -62,7 +63,7 @@ pre {
 </thead>
 <tbody>
 EOF
-for libc in pages/*; do
+for libc in *; do
 	if [ ! -d "$libc" ]; then
 		continue
 	fi
@@ -71,7 +72,7 @@ for libc in pages/*; do
 	last_update=$(git --no-pager log -1 --format="%ad" -- "$libc")
 
 	printf '<tr><td><a href="%s">%s</a></td><td>%s</td><td>%s</td></tr>' \
-		"$path" "$path" "$(du --human-readable "$libc" | cut --fields 1)" "$last_update" >> pages/index.html
+		"$path" "$path" "$(du --human-readable "$libc" | cut --fields 1)" "$last_update" >> index.html
 
 	cat << EOF > "$libc"/index.html
 <html>
@@ -120,7 +121,7 @@ EOF
 </html>
 EOF
 done
-cat << EOF >> pages/index.html
+cat << EOF >> index.html
 </tbody>
 </table>
 <h1>Latest Changelog</h1>
