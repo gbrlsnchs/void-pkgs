@@ -10,4 +10,4 @@ git add commit_index && git commit --message "Reset commit index"
 
 git switch ci
 git reset --hard tmp_ci
-git push --force
+git push --force --set-upstream origin ci
