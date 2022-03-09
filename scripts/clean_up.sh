@@ -1,5 +1,6 @@
 #!/bin/sh
 
+git worktree remove /tmp/ci
 git switch ci
 commit_index="$(cat next_index)"
 
