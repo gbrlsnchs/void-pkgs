@@ -13,8 +13,7 @@ modified_list=${modified_list:-"  (none)"}
 deleted_list=${deleted_list:-"  (none)"}
 rebuild_list=${rebuilt_list:-"  (none)"}
 
-changelog_file="/tmp/changelog.txt"
-cat << EOF > "$changelog_file"
+cat << EOF > /tmp/changelog
 Deploy packages for $libc
 
 Added packages:
@@ -29,7 +28,7 @@ $deleted_list
 Packages that have been rebuilt:
 $rebuild_list
 EOF
-changelog_msg="$(cat "$changelog_file")"
+changelog_msg="$(cat /tmp/changelog)"
 
 # Update templates
 cat << EOF > pages/index.html
