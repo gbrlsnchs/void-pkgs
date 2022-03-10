@@ -19,7 +19,7 @@ Deploy packages for $libc
 Added packages:
 $added_list
 
-Updated packages:
+Modified packages:
 $modified_list
 
 Deleted packages:
