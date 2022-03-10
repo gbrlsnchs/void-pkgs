@@ -2,7 +2,7 @@
 
 git fetch origin pages:pages && git worktree add pages
 
-echo "$SIGNING_KEY" > /tmp/signing_key
+echo "$SIGNING_KEY" > /tmp/signing_key.pem
 
 case "$ARCH" in
     *musl* ) libc="musl" ;;
@@ -20,5 +20,5 @@ cp --force /tmp/upstream/hostdir/binpkgs/* pages/"$libc"
 # Sign the repository and its packages.
 export XBPS_TARGET_ARCH="$ARCH"
 xbps-rindex --add --force pages/"$libc"/*."$ARCH".xbps || exit 1
-xbps-rindex --privkey /tmp/signing_key --sign --signedby "$CI_COMMIT_AUTHOR" pages/"$libc" || exit 1
-xbps-rindex --privkey /tmp/signing_key --sign-pkg --force pages/"$libc"/*."$ARCH".xbps || exit 1
+xbps-rindex --privkey /tmp/signing_key.pem --sign --signedby "$CI_COMMIT_AUTHOR" pages/"$libc" || exit 1
+xbps-rindex --privkey /tmp/signing_key.pem --sign-pkg --force pages/"$libc"/*."$ARCH".xbps || exit 1
