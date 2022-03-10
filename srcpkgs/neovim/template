@@ -1,8 +1,8 @@
 # Template file for 'neovim'
 pkgname=neovim
-version=0.7.0+20220309
+version=0.7.0+20220310
 revision=1
-_nightly_commit="205b3765f2c04e3839b15a8d1ce79bd7ea8e4d3d"
+_nightly_commit="0115b3f023da3b3b85f606e5262592b2e4c6c065"
 wrksrc="${pkgname}-${_nightly_commit}"
 build_style=cmake
 build_helper="qemu"
@@ -16,7 +16,7 @@ maintainer="Steve Prybylski <sa.prybylx@gmail.com>"
 license="Apache-2.0, custom:Vim"
 homepage="https://neovim.io"
 distfiles="https://github.com/neovim/neovim/archive/${_nightly_commit}.tar.gz"
-checksum=8a1c3fafc96b24483c3d94210b442fd30453652945575467710b54eb84dd28dc
+checksum=24b271ba2dd98e8660b767fa6fb8cf2c1e9426bb885a068eecda7ffbc70838b3
 
 alternatives="
  vi:vi:/usr/bin/nvim
@@ -32,5 +32,5 @@ pre_configure() {
 }
 
 post_install() {
-	vlicense LICENSE
+	vlicense LICENSE.txt
 }
