@@ -1,31 +1,32 @@
 # Template file for 'talosctl'
 pkgname=talosctl
-version=0.10.2
+version=1.0.0+beta.0
+_ver=${version//+/-}
 revision=1
-wrksrc="talos-${version}"
+wrksrc="talos-${_ver}"
 build_style=go
 build_helper=qemu
 go_import_path="github.com/talos-systems/talos/cmd/talosctl"
 go_ldflags="-s -w
  -X github.com/talos-systems/talos/pkg/version.Name=Talos
- -X github.com/talos-systems/talos/pkg/version.Tag=v${version}"
+ -X github.com/talos-systems/talos/pkg/version.Tag=v${_ver}"
 short_desc="CLI tool for Talos (OS for Kubernetes)"
 maintainer="Gabriel Sanches <gabriel@gsr.dev>"
 license="MPL-2.0"
 homepage="https://talos.dev/"
-distfiles="https://github.com/talos-systems/talos/archive/refs/tags/v${version}.tar.gz"
-checksum=c13b4faa39225335f6eb60a95cd4c79d7341b7d63c6e10ff98705f83af4a4491
-_completions="bash zsh"
+distfiles="https://github.com/talos-systems/talos/archive/refs/tags/v${_ver}.tar.gz"
+checksum=1dd6eb46bae4e61ef18915436da2b3960bbe0f390aa42ee7445de20684b3ec9f
+_complist="bash zsh"
 
 post_build() {
 	talosctl=$(find $GOPATH/bin -name $pkgname)
-	for shell in $_completions; do
+	for shell in $_complist; do
 		vtargetrun  $talosctl completion $shell > ${pkgname}.${shell}
 	done
 }
 
 post_install() {
-	for shell in $_completions; do
+	for shell in $_complist; do
 		vcompletion ${pkgname}.${shell} $shell
 	done
 }
