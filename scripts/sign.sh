@@ -19,6 +19,6 @@ cp --force /tmp/upstream/hostdir/binpkgs/* pages/"$libc"
 
 # Sign the repository and its packages.
 export XBPS_TARGET_ARCH="$ARCH"
-xbps-rindex --add pages/"$libc"/*."$ARCH".xbps || exit 1
-xbps-rindex --privkey /tmp/signing_key --sign-pkg pages/"$libc"/*."$ARCH".xbps || exit 1
+xbps-rindex --add --force pages/"$libc"/*."$ARCH".xbps || exit 1
 xbps-rindex --privkey /tmp/signing_key --sign --signedby "$CI_COMMIT_AUTHOR" pages/"$libc" || exit 1
+xbps-rindex --privkey /tmp/signing_key --sign-pkg --force pages/"$libc"/*."$ARCH".xbps || exit 1
