@@ -11,14 +11,17 @@ esac
 
 # Remove packages that have either been deleted or updated.
 for pkg in $(cat /tmp/ci/modified /tmp/ci/deleted); do
-	rm --force pages/"$libc"/"$pkg"-[0-9]*.[0-9]*.[0-9]*_[0-9]*."$ARCH".*
+	rm --force pages/"$libc"/"$pkg"-[0-9]*.[0-9]*.[0-9]*_[0-9]*."$ARCH".xbps
 done
+
+rm --force pages/"$libc"/*."$ARCH".xbps.sig
+rm --force pages/"$libc"/"$ARCH"-repodata
 
 # Copy new binaries over to correct directory.
 cp --force /tmp/upstream/hostdir/binpkgs/* pages/"$libc"
 
 # Sign the repository and its packages.
 export XBPS_TARGET_ARCH="$ARCH"
-xbps-rindex --add --force pages/"$libc"/*."$ARCH".xbps || exit 1
+xbps-rindex --add pages/"$libc"/*."$ARCH".xbps || exit 1
 xbps-rindex --privkey /tmp/signing_key.pem --sign --signedby "$CI_COMMIT_AUTHOR" pages/"$libc" || exit 1
-xbps-rindex --privkey /tmp/signing_key.pem --sign-pkg --force pages/"$libc"/*."$ARCH".xbps || exit 1
+xbps-rindex --privkey /tmp/signing_key.pem --sign-pkg pages/"$libc"/*."$ARCH".xbps || exit 1
