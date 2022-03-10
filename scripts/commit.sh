@@ -32,6 +32,6 @@ git branch --set-upstream-to origin/"$target_branch"
 
 # Handles parallel jobs trying to commit to the same branch.
 while : ; do
-	git push --quiet "$target_branch" && break
+	git push --quiet && break
 	git pull --quiet
 done
