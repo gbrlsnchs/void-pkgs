@@ -2,7 +2,7 @@
 pkgname=talosctl
 version=1.0.0+beta.0
 _ver=${version//+/-}
-revision=1
+revision=2
 wrksrc="talos-${_ver}"
 build_style=go
 build_helper=qemu
@@ -18,15 +18,17 @@ distfiles="https://github.com/talos-systems/talos/archive/refs/tags/v${_ver}.tar
 checksum=1dd6eb46bae4e61ef18915436da2b3960bbe0f390aa42ee7445de20684b3ec9f
 _complist="bash zsh"
 
+export LDFLAGS="-fuse-ld=bfd"
+
 post_build() {
-	talosctl=$(find $GOPATH/bin -name $pkgname)
+	talosctl=$(find $GOPATH/bin -name "$pkgname")
 	for shell in $_complist; do
-		vtargetrun  $talosctl completion $shell > ${pkgname}.${shell}
+		vtargetrun  "$talosctl" completion "$shell" > "$pkgname"."$shell"
 	done
 }
 
 post_install() {
 	for shell in $_complist; do
-		vcompletion ${pkgname}.${shell} $shell
+		vcompletion "$pkgname"."$shell" "$shell"
 	done
 }
