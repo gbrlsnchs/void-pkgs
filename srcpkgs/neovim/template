@@ -1,8 +1,8 @@
 # Template file for 'neovim'
 pkgname=neovim
-version=0.7.0+20220310
+version=0.7.0+20220315
 revision=1
-_nightly_commit="0115b3f023da3b3b85f606e5262592b2e4c6c065"
+_nightly_commit="bef7552f7088ff411bd68fc236cfd7b269ad157e"
 wrksrc="${pkgname}-${_nightly_commit}"
 build_style=cmake
 build_helper="qemu"
@@ -16,7 +16,7 @@ maintainer="Steve Prybylski <sa.prybylx@gmail.com>"
 license="Apache-2.0, custom:Vim"
 homepage="https://neovim.io"
 distfiles="https://github.com/neovim/neovim/archive/${_nightly_commit}.tar.gz"
-checksum=24b271ba2dd98e8660b767fa6fb8cf2c1e9426bb885a068eecda7ffbc70838b3
+checksum=992b227d9651cfa8064417dc56f088337736760d7e1409ea91de239789d701db
 
 alternatives="
  vi:vi:/usr/bin/nvim
@@ -29,6 +29,11 @@ alternatives="
 pre_configure() {
 	vsed -i runtime/CMakeLists.txt \
 		-e "s|\".*/bin/nvim|\${CMAKE_CROSSCOMPILING_EMULATOR} &|g"
+
+	if [ "$CROSS_BUILD" ]; then
+		# https://github.com/neovim/neovim/pull/16722#issue-1084168744
+		configure_args+=" -DCOMPILE_LUA=OFF"
+	fi
 }
 
 post_install() {
