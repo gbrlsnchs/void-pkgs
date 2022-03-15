@@ -15,3 +15,8 @@ else
 	cp --recursive void-packages/srcpkgs/"$pkgname" srcpkgs/"$pkgname"
 	git add srcpkgs/"$pkgname" && git commit --message "Add new package \"$pkgname\""
 fi
+
+if [ "$?" -eq 0 ]; then
+	echo "Cleaning upstream directory..."
+	rm --recursive --force void-packages/srcpkgs/"$pkgname"
+fi
