@@ -9,7 +9,8 @@ cd ..
 if [ -d srcpkgs/"$pkgname" ]; then
 	cp --force --recursive --no-target-directory void-packages/srcpkgs/"$pkgname" srcpkgs/"$pkgname"
 	version="$(./void-packages/xbps-src show "$pkgname" | sed -n '/^version/s/[^:]*:[\t]*//p')"
-	git add srcpkgs/"$pkgname" && git commit --message "$pkgname: Update to version $version"
+	revision="$(./void-packages/xbps-src show "$pkgname" | sed -n '/^revision/s/[^:]*:[\t]*//p')"
+	git add srcpkgs/"$pkgname" && git commit --message "$pkgname: Update to version $version-$revision"
 else
 	cp --recursive void-packages/srcpkgs/"$pkgname" srcpkgs/"$pkgname"
 	git add srcpkgs/"$pkgname" && git commit --message "Add new package \"$pkgname\""
