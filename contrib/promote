@@ -18,5 +18,7 @@ fi
 
 if [ "$?" -eq 0 ]; then
 	echo "Cleaning upstream directory..."
-	rm --recursive --force void-packages/srcpkgs/"$pkgname"
+	cd void-packages
+	pkgpath="srcpkgs/$pkgname"
+	git restore "$pkgpath" || rm --recursive --force "$pkgpath"
 fi
