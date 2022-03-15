@@ -25,7 +25,7 @@ for pkg in $build_pkgs; do
 	if [ "$ARCH" != "$BOOTSTRAP_ARCH" ]; then
 		/tmp/upstream/xbps-src -a "$ARCH" -j "$(nproc)" pkg "$pkg" > /tmp/buildlog
 	else
-		/tmp/upstream/xbps-src -j "$(nproc)" pkg "$pkg" > /tmp/buildlog
+		/tmp/upstream/xbps-src -Q -j "$(nproc)" pkg "$pkg" > /tmp/buildlog
 	fi
 
 	if [ "$?" -eq 0 ]; then
