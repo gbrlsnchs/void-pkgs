@@ -1,0 +1,5 @@
+#!/bin/sh
+
+pkgname="$1"
+
+cp --recursive --force --no-target-directory srcpkgs/"$pkgname" void-packages/srcpkgs/"$pkgname"
