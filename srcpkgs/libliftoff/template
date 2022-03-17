@@ -1,7 +1,7 @@
 # Template file for 'libliftoff'
 pkgname=libliftoff
 version=0.2.0
-revision=1
+revision=2
 build_style=meson
 configure_args="-Dwerror=false"
 hostmakedepends="pkg-config"
@@ -12,6 +12,7 @@ license="MIT"
 homepage="https://gitlab.freedesktop.org/emersion/libliftoff"
 distfiles="https://gitlab.freedesktop.org/emersion/libliftoff/-/releases/v${version}/downloads/libliftoff-${version}.tar.gz"
 checksum=6877482fbfbab439c1ebd653a355a44ef0373bed57cc0eb37baaee71d7c53016
+make_check=no
 
 post_install() {
 	vlicense LICENSE
