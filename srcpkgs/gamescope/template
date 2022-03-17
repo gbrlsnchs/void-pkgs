@@ -1,0 +1,38 @@
+# Template file for 'gamescope'
+pkgname=gamescope
+version=3.11.27
+create_wrksrc=yes
+revision=1
+build_style=meson
+configure_args="-Dforce_fallback_for=[]
+ $(vopt_bool pipewire pipewire | sed -e 's/true/enabled/' | sed -e 's/false/disabled/')"
+hostmakedepends="pkg-config git"
+makedepends="wayland-devel wayland-protocols wlroots-devel libX11-devel libXdamage-devel
+ libXcomposite-devel libXrender-devel libXext-devel libXfixes-devel libXxf86vm-devel libXres-devel
+ libXtst-devel libdrm-devel libliftoff-devel vulkan-loader libxkbcommon-devel libcap-devel SDL2-devel
+ glslang-devel $(vopt_if pipewire 'pipewire-devel')"
+build_wrksrc="${pkgname}-${version}"
+short_desc="SteamOS session compositing window manager"
+maintainer="Gabriel Sanches <gabriel@gsr.dev>"
+license="BSD-2-Clause"
+homepage="https://github.com/Plagman/gamescope"
+_stb_commit="af1a5bc352164740c1cc1354942b1c6b72eacb8a"
+distfiles="https://github.com/Plagman/gamescope/archive/refs/tags/${version}.tar.gz
+ https://github.com/nothings/stb/archive/${_stb_commit}.zip"
+checksum="e6a226b70b0eb07de1ab510be3a9104ffef79a634ed8366b2439f785a60fc207
+ e3d0edbecd356506d3d69b87419de2f9d180a98099134c6343177885f6c2cbef"
+
+build_options="pipewire"
+desc_option_pipewire="Enable support for PipeWire"
+
+build_options_default="pipewire"
+
+pre_configure() {
+	local stb_path="subprojects/stb"
+	cp -r ../stb-"$_stb_commit" "$stb_path"
+	meson subprojects update --reset stb
+}
+
+post_install() {
+	vlicense LICENSE
+}
