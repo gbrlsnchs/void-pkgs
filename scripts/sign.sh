@@ -10,8 +10,9 @@ case "$ARCH" in
 esac
 
 # Remove packages that have either been deleted or updated.
-for pkg in $(cat /tmp/ci/modified /tmp/ci/deleted); do
+for pkg in $(cat /tmp/ci/rebuild /tmp/ci/modified /tmp/ci/deleted); do
 	rm --force pages/"$libc"/"$pkg"-[0-9]*.[0-9]*.[0-9]*_[0-9]*."$ARCH".xbps
+	rm --force pages/"$libc"/"$pkg"-devel-[0-9]*.[0-9]*.[0-9]*_[0-9]*."$ARCH".xbps
 done
 
 rm --force pages/"$libc"/*."$ARCH".xbps.sig
