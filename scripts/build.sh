@@ -15,6 +15,10 @@ for src in $eligible_pkgs; do
 	cp --no-target-directory --recursive --force "$src" "$dst"
 done
 
+if [ -f shlibs ]; then
+	cat shlibs >> /tmp/upstream/common/shlibs
+fi
+
 echo XBPS_CHROOT_CMD=ethereal >> /tmp/upstream/etc/conf
 echo XBPS_ALLOW_CHROOT_BREAKOUT=yes >> /tmp/upstream/etc/conf
 ln -s / /tmp/upstream/masterdir
