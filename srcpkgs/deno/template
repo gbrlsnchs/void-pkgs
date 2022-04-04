@@ -1,7 +1,7 @@
 # Template file for 'deno'
 pkgname=deno
-version=1.20.1
-revision=1
+version=1.20.4
+revision=2
 _gn_githash=6f13aaac
 archs="x86_64"
 create_wrksrc=yes
@@ -15,8 +15,8 @@ license="MIT"
 homepage="https://deno.land"
 distfiles="https://github.com/denoland/deno/archive/v${version}.tar.gz
 https://gn.googlesource.com/gn/+archive/${_gn_githash}.tar.gz"
-checksum="c5d0dc71dfa300ce14a8057fd4c0d16b86e963fff34c48ea28782521ce1144fc
- cdce461c3fdcb6d61b4a9c9b79b5caf1491d1ac93d4d270bc41101c1e3c41536"
+checksum="4e7cd0342830d138caf5deba3138833084fac3ad027837119ad19598453927d8
+ @e646f581c0332cf82a017c504434942fc44e6d94ac23ecd59e5064a288279a7d"
 
 post_extract() {
 	printf '#define LAST_COMMIT_POSITION "%s"\n' "${_gn_githash}" >src/gn/last_commit_position.h
