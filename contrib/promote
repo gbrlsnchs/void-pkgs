@@ -2,10 +2,7 @@
 
 pkgname="$1"
 
-cd void-packages
-xgensum -f -i "$pkgname"
-cd ..
-
+# Update package or create it.
 if [ -d srcpkgs/"$pkgname" ]; then
 	cp --force --recursive --no-target-directory void-packages/srcpkgs/"$pkgname" srcpkgs/"$pkgname"
 	version="$(./void-packages/xbps-src show "$pkgname" | sed -n '/^version/s/[^:]*:[\t]*//p')"
