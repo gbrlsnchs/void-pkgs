@@ -11,3 +11,10 @@ git add commit_index && git commit --message "Reset commit index"
 git switch ci
 git reset --hard tmp_ci
 git push --force --set-upstream origin ci
+
+git switch --orphan tmp_pages
+git fetch origin pages:pages
+git cherry-pick pages
+git switch pages
+git reset --hard tmp_pages
+git push --force --set-upstream origin pages
