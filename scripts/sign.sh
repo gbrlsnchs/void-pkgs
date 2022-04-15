@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git clone https://github.com/gbrlsnchs/void-bins.git
+git clone https://github.com/gbrlsnchs/void-bins.git pages
 
 echo "$SIGNING_KEY" > /tmp/signing_key.pem
 
