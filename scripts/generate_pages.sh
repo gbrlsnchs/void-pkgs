@@ -1,7 +1,7 @@
 #!/bin/sh
 
 git fetch origin ci:ci && git worktree add /tmp/ci
-git fetch origin pages:pages && git worktree add pages
+git clone https://github.com/gbrlsnchs/void-bins.git pages
 
 added_list=$(sed --regexp-extended "s/(.+)/  * \1/" < /tmp/ci/added)
 modified_list=$(sed --regexp-extended "s/(.+)/  * \1/" < /tmp/ci/modified)

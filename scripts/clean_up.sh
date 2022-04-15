@@ -12,10 +12,7 @@ git switch ci
 git reset --hard tmp_ci
 git push --force --set-upstream origin ci
 
-git worktree remove pages
-git switch --orphan tmp_pages
-git fetch origin pages:pages
-git cherry-pick pages
-git switch pages
-git reset --hard tmp_pages
-git push --force --set-upstream origin pages
+# This is located in a different repository.
+cd pages
+git reset $(git commit-tree HEAD^{tree} --message "Squash commits for binary repo")
+git push --force

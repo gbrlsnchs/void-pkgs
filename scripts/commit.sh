@@ -8,7 +8,15 @@ if [ "$target_branch" != "$current_branch" ]; then
 	cd "$target_branch" || exit 1
 fi
 
-git remote set-url origin "https://$CI_REPO_OWNER:$ACCESS_TOKEN@codeberg.org/$CI_REPO.git"
+if [ "$CI_PUBLISH_BINS" = "1" ]; then
+	CI_HOST="github.com"
+	CI_REPO="void-bins"
+	ACCESS_TOKEN="$BINREPO_TOKEN"
+fi
+
+repo_host="${CI_HOST:-"codeberg.org"}"
+
+git remote set-url origin "https://$CI_REPO_OWNER:$ACCESS_TOKEN@$repo_host/$CI_REPO.git"
 git config --global user.name "$CI_COMMIT_AUTHOR"
 git config --global user.email "$CI_COMMIT_AUTHOR_EMAIL"
 
