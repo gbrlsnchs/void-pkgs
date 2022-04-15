@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git fetch origin pages:pages && git worktree add pages
+git clone https://github.com/gbrlsnchs/void-bins.git
 
 echo "$SIGNING_KEY" > /tmp/signing_key.pem
 
