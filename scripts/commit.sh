@@ -12,6 +12,7 @@ if [ "$CI_PUBLISH_BINS" = "1" ]; then
 	CI_HOST="github.com"
 	CI_REPO="void-bins"
 	ACCESS_TOKEN="$BINREPO_TOKEN"
+	target_branch="$current_branch"
 fi
 
 repo_host="${CI_HOST:-"codeberg.org"}"
