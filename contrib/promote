@@ -4,18 +4,18 @@ pkgname="$1"
 
 # Update package or create it.
 if [ -d srcpkgs/"$pkgname" ]; then
-	cp --force --recursive --no-target-directory void-packages/srcpkgs/"$pkgname" srcpkgs/"$pkgname"
-	version="$(./void-packages/xbps-src show "$pkgname" | sed -n '/^version/s/[^:]*:[\t]*//p')"
-	revision="$(./void-packages/xbps-src show "$pkgname" | sed -n '/^revision/s/[^:]*:[\t]*//p')"
+	cp --force --recursive --no-target-directory void-lab/srcpkgs/"$pkgname" srcpkgs/"$pkgname"
+	version="$(./void-lab/xbps-src show "$pkgname" | sed -n '/^version/s/[^:]*:[\t]*//p')"
+	revision="$(./void-lab/xbps-src show "$pkgname" | sed -n '/^revision/s/[^:]*:[\t]*//p')"
 	git add srcpkgs/"$pkgname" && git commit --message "$pkgname: Update to version $version-$revision"
 else
-	cp --recursive void-packages/srcpkgs/"$pkgname" srcpkgs/"$pkgname"
+	cp --recursive void-lab/srcpkgs/"$pkgname" srcpkgs/"$pkgname"
 	git add srcpkgs/"$pkgname" && git commit --message "Add new package \"$pkgname\""
 fi
 
 if [ "$?" -eq 0 ]; then
 	echo "Cleaning upstream directory..."
-	cd void-packages
+	cd void-lab
 	pkgpath="srcpkgs/$pkgname"
-	git restore "$pkgpath" || rm --recursive --force "$pkgpath"
+	git restore "$pkgpath" > /dev/null || rm --recursive --force "$pkgpath"
 fi
