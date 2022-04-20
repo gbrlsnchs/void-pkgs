@@ -1,4 +1,6 @@
 .env
 .ci
 .vcs
-void-packages
+out
+data/
+void-*
