@@ -1,0 +1,21 @@
+diff --git a/setup.py b/setup.py
+index cf739e2..e4781e5 100644
+--- a/setup.py
++++ b/setup.py
+@@ -7,7 +7,6 @@ import sys
+ import typing
+ 
+ from setuptools import setup
+-from setuptools_scm import get_version
+ 
+ 
+ class IsReleasableCommand(distutils.cmd.Command):
+@@ -23,7 +22,7 @@ class IsReleasableCommand(distutils.cmd.Command):
+         ...
+ 
+     def run(self):
+-        value = get_version()
++        value = "{{version}}"
+         releasable = re.match("^[0-9]+\\.[0-9]+\\.[0-9]+$", value) is not None
+         self.announce(
+             f"Version {value} is {'' if releasable else 'NOT '}releasable",

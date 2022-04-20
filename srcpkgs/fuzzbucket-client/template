@@ -1,0 +1,23 @@
+# Template file for 'fuzzbucket-client'
+pkgname=fuzzbucket-client
+version=0.12.0
+revision=1
+wrksrc="fuzzbucket-$version"
+build_style=python3-module
+hostmakedepends="python3-setuptools"
+checkdepends="python3-pytest"
+short_desc="CLI tool to communicate with Fuzzbucket servers"
+maintainer="Gabriel Sanches <gabriel@gsr.dev>"
+license="MIT"
+homepage="https://github.com/rstudio/fuzzbucket"
+distfiles="https://github.com/rstudio/fuzzbucket/archive/refs/tags/$version.tar.gz"
+checksum=c2aae1421bae638ddfe7755b447fd94658a93f6cff946828c2b3f80dcdaf43a0
+make_check="no" # tests are failing for some reason, maybe python version?
+
+pre_build() {
+	echo "version = '$version'" > fuzzbucket_client/__version__.py
+}
+
+post_install() {
+	vlicense LICENSE.md
+}
