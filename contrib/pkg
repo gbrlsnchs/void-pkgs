@@ -1,192 +1,104 @@
 #!/bin/sh
 
-error=0
-warn=1
-info=2
-debug=3
+. ./scripts/common/print.sh
 
-cur_lvl=${1:-$info}
+packages="$*"
 
-author="Gabriel Sanches"
-
-print_header() {
-	msg="$1"
-
-	echo "$(tput bold)>>> $msg...$(tput sgr0)"
-}
-
-print_msg() {
-	level=$1
-
-	if [ "$cur_lvl" -lt "$level" ]; then
-		return
-	fi
-
-	case "$level" in
-		"$debug") prefix="$(tput setaf 2)DEBUG$(tput sgr0)" ;;
-		"$info") prefix="$(tput setaf 4)INFO$(tput sgr0)" ;;
-		"$warn") prefix="$(tput setaf 3)WARN$(tput sgr0)" ;;
-		"$error")
-			prefix="$(tput setaf 1)ERROR$(tput sgr0)"
-			will_exit=1
-			;;
-	esac
-
-	msg="$2"
-
-	if [ -z "$msg" ]; then
-		return
-	fi
-
-	echo "$msg" | sed "s/^/| $prefix\t/"
-	if [ "$will_exit" = "1" ]; then
-		exit 1
-	fi
-}
-
-pretty_list() {
-	file="$1"
-	output=$(sed --regexp-extended "s/(.+)/  * \1/" < "$file")
-
-	echo "${output:-"  (none)"}"
-}
-
-print_header "Setting up input files"
-if [ ! -f data/commit_index ]; then
-	git rev-parse HEAD > data/commit_index
+# If no specific package has been specified, let's build them all.
+if [ -z "$packages" ]; then
+	packages="$(git ls-files 'srcpkgs/*' | cut --delimiter / --fields 2 | uniq)"
 fi
 
-print_header "Setting up output directories"
-log_dir=out/log
-mkdir --parents "$log_dir"
-print_msg $debug "Logs will be available at '$log_dir'"
-rm --force "$log_dir"/*
-helper_dir=/tmp/void-pkgs
-mkdir --parents "$helper_dir" # for capturing error messages
+print_header $info "Preparing output directories"
+if ! ./scripts/local/prepare.sh > out/msg 2>&1; then
+	print_header $error "Could not prepare output directories"
+	print_msg "$(cat out/msg)"
+	exit 1
+fi
 
-print_header "Generating diffs"
-mkdir --parents out/class
-for action in Added Modified Deleted; do
-	class="$(echo "$action" | cut --characters 1)"
-
-	print_msg $info "$action:"
-	list="$(./scripts/diff.sh "$class" \
-			| cut --delimiter / --fields 2 \
-			| tee out/class/"$class" \
-			| sed "s/^/  * /")"
-
-	print_msg $info "${list:-"  (none)"}"
-done
-
-print_header "Generating changelog file..."
-added_list=$(pretty_list out/class/A)
-modified_list=$(pretty_list out/class/M)
-deleted_list=$(pretty_list out/class/D)
-
-cat << EOF > out/changelog
-Deploy package updates
-
-Added packages:
-$added_list
-
-Modified packages:
-$modified_list
-
-Deleted packages:
-$deleted_list
-EOF
-
-print_header "Starting to build packages"
 for arch in x86_64 x86_64-musl; do
-	export XBPS_TARGET_ARCH="$arch"
+	print_header $info "Building requested packages for '$arch'"
 
 	case "$arch" in
-		*-musl) bootstrap_arch="x86_64-musl" ;;
-		*)      bootstrap_arch="x86_64"
+		*-musl) bootstrap_arch=x86_64-musl ;;
+		*)      bootstrap_arch=x86_64 ;;
 	esac
+	print_msg "Bootstrap architecture for this build: '$bootstrap_arch'"
 
-	build_img="ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-${bootstrap_arch}"
+	print_header $info "Removing 'void-packages' repository"
+	if ! rm --recursive --force void-packages > out/msg 2>&1; then
+		print_header $error "Could not remove previous existing 'void-packages' repository"
+		print_msg "$(cat out/msg)"
+		exit 1
+	fi
 
-	print_msg $info "Pulling '$build_img' before building"
-	print_msg $debug "$(podman pull "$build_img" 2>&1)"
+	print_header $info "Cloning fresh version of 'void-packages'"
+	if ! git clone --depth 1 https://github.com/void-linux/void-packages.git > out/msg 2>&1; then
+		print_header $error "Could not clone 'void-packages'"
+		print_msg "$(cat out/msg)"
+	fi
 
-	case "$arch" in
-		x86_64*) ;;
-		*)
-			arch_flag="-a $arch"
-			print_msg $info "Using the following additional flag: '$arch_flag'"
-			;;
-	esac
+	print_header $info "Patching 'common/shlibs'"
+	if ! cat shlibs > out/msg 2>&1; then
+		print_header $error "Could not patch 'common/shlibs'"
+		print_msg "$(cat out/msg)"
+		exit 1
+	else
+		cat out/msg >> void-packages/common/shlibs 
+	fi
 
-	print_msg $info "Preparing upstream repository"
-	rm --recursive --force void-packages
-	print_msg $debug "$(git clone --depth 1 https://github.com/void-linux/void-packages.git 2>&1)"
-	cat shlibs >> void-packages/common/shlibs
-	print_msg $info "'common/shlibs' has been patched"
-	cp conf void-packages/etc/conf
-	print_msg $info "'etc/conf' has been created"
+	for pkg in $packages; do
+		if [ -L srcpkgs/"$pkg" ]; then
+			continue
+		fi
 
-	print_msg $info "Copying packages to source repository"
-	for pkg in $(git ls-files 'srcpkgs/*' | cut --delimiter / --fields 2 | uniq); do
-		print_msg $debug "Copying '$pkg'"
-		cp --recursive --no-target-directory --force srcpkgs/"$pkg" void-packages/srcpkgs/"$pkg"
+		print_header $info "Building '$pkg' for '$arch'"
+
+		if [ ! -e data/"$pkg".ignore ]; then
+			case "$pkg" in
+				*-devel) ;;
+				*)
+					print_msg "Updating checksum of '$pkg' for '$arch'"
+					if ! ./scripts/local/checksum.sh "$bootstrap_arch" "$pkg" > out/msg 2>&1; then
+						print_header $error "Could not update checksum of '$pkg' for '$arch'"
+						print_msg "$(cat out/msg)"
+						exit 1
+					fi
+					;;
+			esac
+		fi
+
+		print_msg "Copying source of '$pkg' into 'void-packages'"
+		if ! cp --recursive --no-target-directory --force \
+			srcpkgs/"$pkg" void-packages/srcpkgs/"$pkg" > out/msg 2>&1
+		then
+			print_header $error "Could not copy '$pkg' to 'void-packages'"
+			print_msg "$(cat out/msg)"
+			exit 1
+		fi
+
+		print_msg "Started packaging '$pkg' for '$arch'"
+		./scripts/local/build.sh "$bootstrap_arch" "$arch" "$pkg" > out/msg 2>&1
+		exit_code=$?
+		if [ $exit_code -eq 0 ]; then
+			print_msg "Finished building '$pkg' for '$arch'"
+		elif [ $exit_code -eq 2 ]; then
+			print_header $warn "Could not build '$pkg' for '$arch'"
+			print_msg "Check logs at 'out/log/$pkg-$arch.log'"
+		else
+			print_header $error "Failed to build package '$pkg' for '$arch'"
+			print_msg "$(cat out/msg)"
+			exit 1
+		fi
 	done
 
-	print_msg $info "Building packages for '$arch' architecture"
-	podman container run \
-		--rm \
-		--volume="$PWD/void-packages:/tmp/upstream" \
-		--volume="$PWD/out/class:/tmp/class" \
-		--volume="$PWD/out/log:/var/log/xbps-src" \
-		--volume="$PWD/scripts/pkg.sh:/opt/pkg.sh" \
-		"$build_img" \
-		/opt/pkg.sh "$bootstrap_arch" "$arch" > "$helper_dir/$arch" 2>&1
-	print_msg $info "Status for '$arch' architecture build:\n'$(cat "$helper_dir/$arch")'"
-
-	case "$arch" in
-		*-musl) libc="musl" ;;
-		*)      libc="glibc" ;;
-	esac
-
-	print_msg $info "Removing packages that are obsolete for '$arch' architecture"
-	for pkg in $(cat out/class/A out/class/M out/class/D); do
-		rm --force void-bins/"$libc"/"$pkg"-[0-9]*.[0-9]*.[0-9]*_[0-9]*."$arch".xbps
-		rm --force void-bins/"$libc"/"$pkg"-devel-[0-9]*.[0-9]*.[0-9]*_[0-9]*."$arch".xbps
-	done
-
-	print_msg $info "Removing signature and repodata for '$arch' architecture"
-	rm --force void-bins/"$libc"/*."$arch".xbps.sig
-	rm --force void-bins/"$libc"/"$arch"-repodata
-
-	out_dir=void-bins/"$libc"
-	print_msg $info "Storing files generated by XBPS in '$out_dir'"
-
-	mkdir --parents "$out_dir"
-	cp --archive --force void-packages/hostdir/binpkgs/. "$out_dir" > "$helper_dir"/err 2>&1 \
-		|| print_msg $error "Could not copy 'binpkgs' to output directory: '$(cat "$helper_dir"/err)'"
-
-	print_msg $info "Signing packages for '$arch' architecture"
-	xbps-rindex --add "$out_dir"/*."$arch".xbps > "$helper_dir"/err 2>&1 \
-		|| print_msg $error "Could not exec 'xbps-rindex --add ...': '$(cat "$helper_dir"/err)'"
-	xbps-rindex --privkey data/private.pem --sign --signedby "$author" "$out_dir" > "$helper_dir"/err 2>&1 \
-		|| print_msg $error "Could not exec 'xbps-rindex --sign ...': '$(cat "$helper_dir"/err)'"
-	xbps-rindex --privkey data/private.pem --sign-pkg "$out_dir"/*."$arch".xbps > "$helper_dir"/err 2>&1 \
-		|| print_msg $error "Could not exec 'xbps-rindex --sign-pkg ...': '$(cat "$helper_dir"/err)'"
-
-	print_msg $info "Generating pages for '$arch' architecture"
-	./scripts/html.sh "$libc"
-
-	unset XBPS_TARGET_ARCH
+	print_header $info "Signing packages for '$arch'"
+	if ! ./scripts/local/sign.sh "$bootstrap_arch" "$arch" > out/msg 2>&1; then
+		print_header $warn "Could not sign packages for '$arch'"
+		print_msg "$(cat out/msg)"
+	fi
 done
 
-print_header "Preparing to push changes"
-print_msg $info "Updating commit index"
-git rev-parse HEAD > data/commit_index
-
-print_msg $info "Creating commit in 'void-bins'"
-cd void-bins
-git add --all
-git commit --file=../out/changelog
-git push
-
-print_msg $info "OK"
+print_header $info "Cleaning up output directory"
+rm --force out/msg
+rm --recursive --force void-packages

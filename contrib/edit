@@ -2,4 +2,4 @@
 
 pkgname="$1"
 
-cp --recursive --force --no-target-directory srcpkgs/"$pkgname" void-packages/srcpkgs/"$pkgname"
+cp --recursive --force --no-target-directory srcpkgs/ void-lab/srcpkgs/
