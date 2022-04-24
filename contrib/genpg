@@ -1,0 +1,6 @@
+#!/bin/sh
+
+. ./scripts/common/print.sh
+
+print_header $info "Generating HTML pages for 'void-bins'"
+print_msg "$(./scripts/local/html.sh > /dev/null 2>&1)"
