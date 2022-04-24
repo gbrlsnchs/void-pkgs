@@ -1,0 +1,33 @@
+#!/bin/sh
+
+. ./scripts/common/print.sh
+
+pkg="$1"
+
+if [ -z "$pkg" ]; then
+	print_header $error "Please inform a package to be removed"
+	exit 1
+fi
+
+print_header $info "Trying to remove binaries for '$pkg'"
+for libc in void-bins/*/; do
+	for pkgname in "$pkg" "$pkg-devel"; do
+		for pkgbin in "$libc$pkgname"-[0-9]*.[0-9]*.[0-9]*_[0-9]*.*.xbps*; do
+			if [ ! -e "$pkgbin" ]; then
+				continue
+			fi
+
+			print_msg "Removing '$pkgbin'"
+			rm --force "$pkgbin"
+		done
+	done
+done
+
+for libc in void-bins/*/; do
+	for repodata in "$libc"*-repodata; do
+		print_header $info "Updating '$libc$repodata'"
+
+		arch="$(basename "$repodata" | sed --regexp-extended "s/(.*)-repodata/\1/")"
+		print_msg "$(XBPS_TARGET_ARCH="$arch" xbps-rindex --clean "$PWD/$libc" 2>&1)"
+	done
+done
