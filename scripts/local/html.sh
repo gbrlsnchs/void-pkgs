@@ -30,7 +30,9 @@ for libc in *; do
 		continue
 	fi
 
-	for pkgbin in **/*.xbps; do
+	rows=""
+
+	for pkgbin in "$libc"/*.xbps; do
 		pkgname="$(basename "$pkgbin")"
 		pkgsize="$(get_size "$pkgbin")"
 		last_update="$(get_last_update "$pkgbin")"
