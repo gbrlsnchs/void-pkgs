@@ -43,7 +43,6 @@ for libc in *; do
 				--expression "s/{{name}}/$pkgname/g" \
 				--expression "s/{{size}}/$pkgsize/g" \
 				--expression "s/{{last_update}}/$last_update/g" \
-				--expression "s/{{signature_last_update}}/$last_update_sig/g" \
 				../templates/pkgs.html
 		)"
 		rows="$rows\n$entries"
