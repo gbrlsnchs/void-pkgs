@@ -20,6 +20,9 @@ common_styles='
 		border: 1px solid black;
 		padding: 5px;
 	}
+	pre {
+		font-size: 1.2em;
+	}
 '
 
 cd void-bins || exit 1
