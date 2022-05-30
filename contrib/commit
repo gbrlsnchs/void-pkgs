@@ -1,0 +1,26 @@
+#!/bin/sh
+
+pkg="$1"
+
+[ -z "$pkg" ] && exit 1
+
+# Update package or create it.
+if git ls-files --error-unmatch "srcpkgs/$pkg" > /dev/null 2>&1; then
+	output="$(
+		podman container run \
+			--rm \
+			--userns=keep-id \
+			--volume=/tmp/void-packages:/etc/void-packages \
+			--volume="$PWD/srcpkgs:/etc/void-packages/srcpkgs" \
+			--workdir=/etc/void-packages \
+			"ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-x86_64" \
+			./xbps-src show "$pkg" 2>/dev/null
+	)"
+	version="$(echo "$output" | sed -n '/^version/s/[^:]*:[\t]*//p')"
+	revision="$(echo "$output" | sed -n '/^revision/s/[^:]*:[\t]*//p')"
+	commit_msg="$pkg: Update to version $version-$revision"
+else
+	commit_msg="Add new package \"$pkg\""
+fi
+
+git add "srcpkgs/$pkg" && git commit --message "$commit_msg"
