@@ -1,5 +1,12 @@
 #!/bin/sh
 
-pkgname="$1"
+. ./scripts/common/print.sh
 
-cp --recursive --force --no-target-directory srcpkgs/ void-lab/srcpkgs/
+pkg="$1"
+
+if [ -z "$pkg" ]; then
+	print_header $error "Please inform a package to be copied from upstream"
+	exit 1
+fi
+
+cp --recursive --force --no-target-directory /tmp/void-packages/srcpkgs/"$pkg" srcpkgs/"$pkg"
