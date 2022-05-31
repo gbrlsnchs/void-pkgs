@@ -1,0 +1,27 @@
+# Template file for 'jdtls'
+pkgname=jdtls
+version=1.11.0
+revision=1
+create_wrksrc=yes
+depends="virtual?java-environment"
+short_desc="Java language server"
+maintainer="Gabriel Sanches <gabriel@gsr.dev>"
+license="EPL-2.0"
+homepage="https://github.com/eclipse/eclipse.jdt.ls"
+distfiles="https://download.eclipse.org/jdtls/milestones/$version/jdt-language-server-$version-202205051421.tar.gz"
+checksum=a9b82b1b0c93e89302369c8c4cf749209168b67341fad37c0829c509a11445c8
+
+do_install() {
+	local libpath="usr/libexec/$pkgname"
+	local cfgpath="usr/share/$pkgname"
+
+	vmkdir "$libpath/bin"
+	vmkdir "$cfgpath"
+
+	vcopy "plugins features" "$libpath"
+	vcopy bin/jdtls "$libpath/bin"
+	vcopy config_linux "$cfgpath"
+
+	sed ${FILESDIR}/wrapper --expression "s;@PKGNAME@;$pkgname;g" > "$pkgname-wrapper"
+	vbin "$pkgname-wrapper" "$pkgname"
+}
