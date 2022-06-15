@@ -1,7 +1,12 @@
 #!/bin/sh
 
-TMPPATH=$(mktemp -d "/tmp/@PKGNAME@.XXXX)")
-DEFAULT_LOGPATH="$TMPPATH/log"
-DEFAULT_METAPATH="$TMPPATH/meta"
+tmpdir=$(mktemp -d "/tmp/@PKGNAME@.XXXXX")
+default_logpath="$tmpdir/log"
+default_metapath="$tmpdir/meta"
 
-exec /usr/lib/@PKGNAME@/bin/@PKGNAME@ --logpath="$DEFAULT_LOGPATH" --metapath="$DEFAULT_METAPATH" "$@"
+trap "{ rm -rf $tmpdir; }" EXIT
+
+exec /usr/libexec/@PKGNAME@/bin/@PKGNAME@ \
+	--logpath="$default_logpath" \
+	--metapath="$default_metapath" \
+	"$@"
