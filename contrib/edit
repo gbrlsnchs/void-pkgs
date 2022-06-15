@@ -1,6 +1,7 @@
 #!/bin/sh
 
 . ./scripts/common/print.sh
+./scripts/common/upstream.sh
 
 pkg="$1"
 
