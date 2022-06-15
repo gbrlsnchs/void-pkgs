@@ -3,4 +3,5 @@
 .vcs
 out
 data/
-void-*
+*-bins
+*-packages
