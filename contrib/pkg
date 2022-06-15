@@ -46,7 +46,7 @@ for arch in x86_64 x86_64-musl; do
 		print_msg "$(cat out/msg)"
 		exit 1
 	else
-		cat out/msg >> void-packages/common/shlibs 
+		cat out/msg >> void-packages/common/shlibs
 	fi
 
 	for pkg in $packages; do
@@ -71,9 +71,13 @@ for arch in x86_64 x86_64-musl; do
 		fi
 
 		print_msg "Copying source of '$pkg' into 'void-packages'"
-		if ! cp --recursive --no-target-directory --force \
-			srcpkgs/"$pkg" void-packages/srcpkgs/"$pkg" > out/msg 2>&1
-		then
+		if ! rm --force --recursive void-packages/srcpkgs/"$pkg" > out/msg 2>&1; then
+			print_header $error "Could not clean '$pkg' from 'void-packages'"
+			print_msg "$(cat out/msg)"
+			exit 1
+		fi
+		
+		if ! cp --recursive --force srcpkgs/"$pkg" void-packages/srcpkgs/"$pkg" > out/msg 2>&1; then
 			print_header $error "Could not copy '$pkg' to 'void-packages'"
 			print_msg "$(cat out/msg)"
 			exit 1
