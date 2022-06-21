@@ -1,0 +1,16 @@
+# Template file for 'minecraft-launcher'
+pkgname=minecraft-launcher
+version=1.0.1221
+revision=1
+wrksrc=minecraft-launcher
+depends="virtual?java-runtime"
+short_desc="Launcher for Minecraft"
+maintainer="Gabriel Sanches <gabriel@gsr.dev>"
+license="custom:Proprietary"
+homepage="https://minecraft.net"
+distfiles="https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz"
+checksum=cd9f0b44fc9cec42829cb2e71145ee599f3d34c7715b55963514d0a8d36214ab
+
+do_install() {
+	vbin minecraft-launcher
+}
