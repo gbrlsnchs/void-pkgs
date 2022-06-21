@@ -62,9 +62,9 @@ for arch in x86_64 x86_64-musl; do
 				*)
 					print_msg "Updating checksum of '$pkg' for '$arch'"
 					if ! ./scripts/local/checksum.sh "$bootstrap_arch" "$pkg" > out/msg 2>&1; then
-						print_header $error "Could not update checksum of '$pkg' for '$arch'"
+						print_header $warn "Could not update checksum of '$pkg' for '$arch'"
 						print_msg "$(cat out/msg)"
-						exit 1
+						continue
 					fi
 					;;
 			esac
