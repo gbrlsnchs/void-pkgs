@@ -1,0 +1,25 @@
+# Template file for 'brModelo'
+pkgname=brModelo
+version=3.31
+revision=1
+hostmakedepends="openjdk8 apache-ant"
+depends="openjdk17-jre" # this version is guaranteed to work
+short_desc="Open source database modeler"
+maintainer="Gabriel Sanches <gabriel@gsr.dev>"
+license="GPL-3.0-or-later"
+homepage="http://www.sis4.com/"
+distfiles="https://github.com/chcandido/brModelo/archive/refs/tags/${version}.tar.gz"
+checksum=e5ef850fab0d9e8fd92e24abac1166ba0d7c35aefd00fcfa93c17e10da498ccf
+
+do_build() {
+	. /etc/profile.d/openjdk.sh
+	. /etc/profile.d/apache-ant.sh
+
+	ant
+}
+
+do_install() {
+	vmkdir usr/libexec/brModelo
+	vinstall dist/brModelo.jar 644 usr/libexec/brModelo
+	vbin ${FILESDIR}/brModelo
+}

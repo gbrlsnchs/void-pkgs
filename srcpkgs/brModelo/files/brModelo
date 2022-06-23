@@ -1,0 +1,4 @@
+#!/bin/sh
+
+exec /usr/lib/jvm/openjdk17/bin/java \
+	-jar /usr/libexec/brModelo/brModelo.jar
