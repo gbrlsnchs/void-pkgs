@@ -1,0 +1,12 @@
+diff --git a/river/XwaylandView.zig b/river/XwaylandView.zig
+index aac9af6..536a212 100644
+--- a/river/XwaylandView.zig
++++ b/river/XwaylandView.zig
+@@ -91,6 +91,7 @@ pub fn close(self: Self) void {
+ 
+ pub fn setActivated(self: Self, activated: bool) void {
+     self.xwayland_surface.activate(activated);
++    self.xwayland_surface.restack(null, .above);
+ }
+ 
+ pub fn setFullscreen(self: Self, fullscreen: bool) void {
