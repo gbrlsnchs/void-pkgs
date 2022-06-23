@@ -3,5 +3,6 @@
 .vcs
 out
 data/
+tmp/
 *-bins
 *-packages
