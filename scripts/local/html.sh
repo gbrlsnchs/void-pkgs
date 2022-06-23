@@ -48,14 +48,14 @@ for libc in *; do
 		pkgsize="$(get_size "$pkgbin")"
 		last_update="$(get_last_update "$pkgbin")"
 		last_update_sig="$(get_last_update "$pkgbin.sig")"
-		original_pkgname="$(echo "$pkgname" | sed "s/\(.*\)-[0-9]*\.[0-9]*\.[0-9]*_[0-9]*\..*/\1/")"
+		original_pkgname="$(echo "$pkgname" | sed --regexp-extended "s/(.*)-[0-9](\.[0-9]*)?(\.[0-9]*)?(.*)?_[0-9]*\..*/\1/")"
 
 		entries="$(
 			sed \
 				--expression "s/{{name}}/$pkgname/g" \
 				--expression "s/{{size}}/$pkgsize/g" \
 				--expression "s/{{last_update}}/$last_update/g" \
-				--expression "s|{{source_url}}|https://$repo_url/src/branch/$repo_branch/srcpkgs/${original_pkgname}|g" \
+				--expression "s|{{source_url}}|https://$repo_url/src/branch/$repo_branch/srcpkgs/$original_pkgname|g" \
 				../templates/pkgs.html
 		)"
 		rows="$rows\n$entries"
