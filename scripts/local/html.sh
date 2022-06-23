@@ -8,6 +8,9 @@ get_last_update() {
 	git --no-pager log -1 --format="%ad" -- "$1"
 }
 
+repo_url="$(git config --get remote.origin.url | sed --expression "s/git@\(.*\)\.git/\1/")"
+repo_branch="$(git rev-parse --abbrev-ref HEAD)"
+
 author="Gabriel Sanches"
 meta='
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -46,6 +49,7 @@ for libc in *; do
 				--expression "s/{{name}}/$pkgname/g" \
 				--expression "s/{{size}}/$pkgsize/g" \
 				--expression "s/{{last_update}}/$last_update/g" \
+				--expression "s|{{source_base_url}}|https://$repo_url/src/branch/$repo_branch|g" \
 				../templates/pkgs.html
 		)"
 		rows="$rows\n$entries"
