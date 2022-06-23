@@ -11,16 +11,13 @@ fi
 
 print_header $info "Trying to remove binaries for '$pkg'"
 for libc in void-bins/*/; do
-	for pkgname in "$pkg" "$pkg-devel"; do
-		for pkgbin in "$libc$pkgname"-[0-9]*.[0-9]*.[0-9]*_[0-9]*.*.xbps*; do
-			if [ ! -e "$pkgbin" ]; then
-				continue
-			fi
-
+	find "$libc" \
+		-regextype egrep \
+		-regex ".*/$pkg-[0-9](\.[0-9]*)?(\.[0-9]*)?(.*)?_[0-9]*\..*" | \
+		while read -r pkgbin; do
 			print_msg "Removing '$pkgbin'"
 			rm --force "$pkgbin"
 		done
-	done
 done
 
 for libc in void-bins/*/; do
