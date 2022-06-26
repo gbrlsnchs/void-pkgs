@@ -1,7 +1,7 @@
 # Template file for 'brModelo'
 pkgname=brModelo
 version=3.31
-revision=1
+revision=2
 hostmakedepends="openjdk8 apache-ant"
 depends="openjdk17-jre" # this version is guaranteed to work
 short_desc="Open source database modeler"
@@ -15,7 +15,7 @@ do_build() {
 	. /etc/profile.d/openjdk.sh
 	. /etc/profile.d/apache-ant.sh
 
-	ant
+	ant jar
 }
 
 do_install() {
