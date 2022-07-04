@@ -1,8 +1,8 @@
 # Template file for 'neovim'
 pkgname=neovim
-version=0.8.0+20220614
+version=0.8.0+20220704
 revision=1
-_nightly_commit="619eb32c75e854737cd2ca928dadd6f7367c6533"
+_nightly_commit="f075feee3258d15f6549e33c185f6165f9c7fbfc"
 wrksrc="${pkgname}-${_nightly_commit}"
 build_style=cmake
 build_helper="qemu"
@@ -16,7 +16,7 @@ maintainer="Steve Prybylski <sa.prybylx@gmail.com>"
 license="Apache-2.0, custom:Vim"
 homepage="https://neovim.io"
 distfiles="https://github.com/neovim/neovim/archive/${_nightly_commit}.tar.gz"
-checksum=0ed86b6127ffaf213fbfadb1085f890a6155791c4f809a3d19c34c968a9c04b4
+checksum=7859a5c3a970fd15cd2b2f0f9b34c2e4c0796b54372e3d920ed9f82531b576b7
 
 alternatives="
  vi:vi:/usr/bin/nvim
