@@ -1,6 +1,6 @@
 # Template file for 'kana'
 pkgname=kana
-version=0.1.0
+version=0.2.0
 revision=1
 wrksrc="kana"
 build_style=cargo
@@ -9,7 +9,7 @@ maintainer="Gabriel Sanches <gabriel@gsr.dev>"
 license="MIT"
 homepage="https://codeberg.org/gbrlsnchs/kana"
 distfiles="https://codeberg.org/gbrlsnchs/kana/archive/v${version}.tar.gz"
-checksum=29d643020458935828a7704d4db44e40e6991d0b97ae71ce161da4bf3db67f95
+checksum=cf4a72cdaeb0eee988c08c1b0808cdbe3e4122108be28fd47f9d25a9937b2d9e
 
 post_install() {
 	vlicense LICENSE
