@@ -83,6 +83,21 @@ for arch in x86_64 x86_64-musl; do
 			exit 1
 		fi
 
+		if [ -e srcpkgs/"$pkg"-devel ]; then
+			print_msg "Copying source of '$pkg-devel' into 'void-packages'"
+			if ! rm --force --recursive void-packages/srcpkgs/"$pkg"-devel > out/msg 2>&1; then
+				print_header $error "Could not clean '$pkg-devel' from 'void-packages'"
+				print_msg "$(cat out/msg)"
+				exit 1
+			fi
+
+			if ! cp --recursive --force srcpkgs/"$pkg"-devel void-packages/srcpkgs/"$pkg"-devel > out/msg 2>&1; then
+				print_header $error "Could not copy '$pkg-devel' to 'void-packages'"
+				print_msg "$(cat out/msg)"
+				exit 1
+			fi
+		fi
+
 		print_msg "Started packaging '$pkg' for '$arch'"
 		./scripts/local/build.sh "$bootstrap_arch" "$arch" "$pkg" > out/msg 2>&1
 		exit_code=$?
