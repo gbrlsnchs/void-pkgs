@@ -2,7 +2,7 @@
 .ci
 .vcs
 out
-data/
 tmp/
 *-bins
 *-packages
+*.pem*
