@@ -1,7 +1,7 @@
 # Template file for 'mkcert'
 pkgname=mkcert
 version=1.4.3
-revision=2
+revision=3
 build_style=go
 go_import_path="filippo.io/mkcert"
 go_ldflags="-X main.Version=v${version}"
