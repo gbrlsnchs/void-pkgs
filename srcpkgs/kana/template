@@ -1,10 +1,10 @@
 # Template file for 'kana'
 pkgname=kana
 version=0.2.0
-revision=1
+revision=2
 wrksrc="kana"
 build_style=cargo
-short_desc="CLI program to transliterate romaji text to either hiragana or katakana"
+short_desc="CLI program for transliterating romaji text to either hiragana or katakana"
 maintainer="Gabriel Sanches <gabriel@gsr.dev>"
 license="MIT"
 homepage="https://codeberg.org/gbrlsnchs/kana"
