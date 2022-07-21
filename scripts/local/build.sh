@@ -12,7 +12,7 @@ esac
 podman container run \
 	--rm \
 	--volume="$PWD/void-packages:/etc/void-packages" \
-	--volume="$PWD/void-bins/$libc:/etc/void-packages/hostdir/binpkgs" \
+	--volume="$PWD/out/dist/$libc:/etc/void-packages/hostdir/binpkgs" \
 	--volume="$PWD/out/log:/var/log/xbps-src" \
 	--volume="$PWD/scripts/xbps/pkg.sh:/opt/pkg.sh" \
 	--workdir=/etc/void-packages \

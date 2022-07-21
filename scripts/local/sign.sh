@@ -16,4 +16,4 @@ podman container run \
 	--volume="$PWD/private.pem:/var/private.pem" \
 	--workdir=/etc/void-bins \
 	"ghcr.io/void-linux/xbps-src-masterdir:20210313rc01-$bootstrap_arch" \
-	/opt/rindex.sh
+	/opt/rindex.sh "$arch"

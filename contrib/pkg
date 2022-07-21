@@ -4,6 +4,15 @@
 
 ./scripts/common/upstream.sh
 
+arch="$1"
+
+if [ -z "$arch" ]; then
+	print_header $error "No architecture is set"
+	exit 1
+fi
+
+shift
+
 packages="$*"
 
 # If no specific package has been specified, let's build them all.
@@ -18,14 +27,31 @@ if ! ./scripts/local/prepare.sh > out/msg 2>&1; then
 	exit 1
 fi
 
-for arch in x86_64 x86_64-musl; do
+archs="$arch $arch-musl"
+
+print_header $info "Purging 'out/dist'"
+if ! rm --force --recursive out/dist > out/msg 2>&1; then
+	print_header $error "Could not purge 'out/dist'"
+	print_msg "$(cat out/msg)"
+	exit 1
+fi
+
+
+for arch in $archs; do
 	print_header $info "Building requested packages for '$arch'"
 
 	case "$arch" in
 		*-musl) bootstrap_arch=x86_64-musl ;;
 		*)      bootstrap_arch=x86_64 ;;
 	esac
+	case "$bootstrap_arch" in
+		*-musl) libc="musl" ;;
+		*)      libc="glibc" ;;
+	esac
+
 	print_msg "Bootstrap architecture for this build: '$bootstrap_arch'"
+	print_msg "Creating 'out/dist/$libc'"
+	mkdir --parent out/dist/"$libc"
 
 	print_header $info "Removing 'void-packages' repository"
 	if ! rm --recursive --force void-packages > out/msg 2>&1; then
@@ -61,7 +87,7 @@ for arch in x86_64 x86_64-musl; do
 				*-devel) ;;
 				*)
 					print_msg "Updating checksum of '$pkg' for '$arch'"
-					if ! ./scripts/local/checksum.sh "$bootstrap_arch" "$pkg" > out/msg 2>&1; then
+					if ! ./scripts/local/checksum.sh "$bootstrap_arch" "$arch" "$pkg" > out/msg 2>&1; then
 						print_header $warn "Could not update checksum of '$pkg' for '$arch'"
 						print_msg "$(cat out/msg)"
 						continue
@@ -70,12 +96,14 @@ for arch in x86_64 x86_64-musl; do
 			esac
 		fi
 
-		print_msg "Copying source of '$pkg' into 'void-packages'"
-		if ! rm --force --recursive void-packages/srcpkgs/"$pkg" > out/msg 2>&1; then
-			print_header $error "Could not clean '$pkg' from 'void-packages'"
-			print_msg "$(cat out/msg)"
-			exit 1
-		fi
+		print_msg "Copying all custom sources to 'void-packages'"
+		for custom_pkg in srcpkgs/*; do
+			if ! rm --force --recursive void-packages/srcpkgs/"$custom_pkg" > out/msg 2>&1; then
+				print_header $error "Could not clean '$custom_pkg' from 'void-packages'"
+				print_msg "$(cat out/msg)"
+				exit 1
+			fi
+		done
 		
 		if ! cp --recursive --force srcpkgs/"$pkg" void-packages/srcpkgs/"$pkg" > out/msg 2>&1; then
 			print_header $error "Could not copy '$pkg' to 'void-packages'"
@@ -112,6 +140,13 @@ for arch in x86_64 x86_64-musl; do
 			exit 1
 		fi
 	done
+
+	print_header $info "Copying binaries to '$arch' repository"
+	if ! cp --recursive --force out/dist/"$libc"/. void-bins/"$libc"/ > out/msg 2>&1; then
+		print_header $error "Could not copy binaries from 'out/dist/$libc' to 'void-bins'"
+		print_msg "$(cat out/msg)"
+		exit 1
+	fi
 
 	print_header $info "Signing packages for '$arch'"
 	if ! ./scripts/local/sign.sh "$bootstrap_arch" "$arch" > out/msg 2>&1; then
