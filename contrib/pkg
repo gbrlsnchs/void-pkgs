@@ -98,33 +98,35 @@ for arch in $archs; do
 
 		print_msg "Copying all custom sources to 'void-packages'"
 		for custom_pkg in srcpkgs/*; do
-			if ! rm --force --recursive void-packages/srcpkgs/"$custom_pkg" > out/msg 2>&1; then
-				print_header $error "Could not clean '$custom_pkg' from 'void-packages'"
+			print_msg "Copying '$custom_pkg'"
+
+			if ! rm --force --recursive void-packages/"$custom_pkg" > out/msg 2>&1; then
+				print_header $error "Could not clean '$custom_pkg' in 'void-packages'"
 				print_msg "$(cat out/msg)"
 				exit 1
+			fi
+
+			if ! cp --recursive --force "$custom_pkg" void-packages/"$custom_pkg" > out/msg 2>&1; then
+				print_header $error "Could not copy '$custom_pkg' to 'void-packages'"
+				print_msg "$(cat out/msg)"
+				exit 1
+			fi
+		
+			if [ -e "$custom_pkg"-devel ]; then
+				print_msg "Copying '$custom_pkg-devel' into 'void-packages'"
+				if ! rm --force --recursive void-packages/"$custom_pkg"-devel > out/msg 2>&1; then
+					print_header $error "Could not clean '$custom_pkg-devel' in 'void-packages'"
+					print_msg "$(cat out/msg)"
+					exit 1
+				fi
+
+				if ! cp --recursive --force "$custom_pkg"-devel void-packages/"$custom_pkg"-devel > out/msg 2>&1; then
+					print_header $error "Could not copy '$custom_pkg-devel' to 'void-packages'"
+					print_msg "$(cat out/msg)"
+					exit 1
+				fi
 			fi
 		done
-		
-		if ! cp --recursive --force srcpkgs/"$pkg" void-packages/srcpkgs/"$pkg" > out/msg 2>&1; then
-			print_header $error "Could not copy '$pkg' to 'void-packages'"
-			print_msg "$(cat out/msg)"
-			exit 1
-		fi
-
-		if [ -e srcpkgs/"$pkg"-devel ]; then
-			print_msg "Copying source of '$pkg-devel' into 'void-packages'"
-			if ! rm --force --recursive void-packages/srcpkgs/"$pkg"-devel > out/msg 2>&1; then
-				print_header $error "Could not clean '$pkg-devel' from 'void-packages'"
-				print_msg "$(cat out/msg)"
-				exit 1
-			fi
-
-			if ! cp --recursive --force srcpkgs/"$pkg"-devel void-packages/srcpkgs/"$pkg"-devel > out/msg 2>&1; then
-				print_header $error "Could not copy '$pkg-devel' to 'void-packages'"
-				print_msg "$(cat out/msg)"
-				exit 1
-			fi
-		fi
 
 		print_msg "Started packaging '$pkg' for '$arch'"
 		./scripts/local/build.sh "$bootstrap_arch" "$arch" "$pkg" > out/msg 2>&1
