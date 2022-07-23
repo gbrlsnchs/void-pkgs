@@ -2,11 +2,11 @@
 pkgname=gamescope
 version=3.11.27
 create_wrksrc=yes
-revision=2
+revision=3
 build_style=meson
 configure_args="-Dforce_fallback_for=[]
  $(vopt_bool pipewire pipewire | sed -e 's/true/enabled/' | sed -e 's/false/disabled/')"
-hostmakedepends="pkg-config git"
+hostmakedepends="pkg-config git glslang wayland-devel"
 makedepends="wayland-devel wayland-protocols wlroots-devel libX11-devel libXdamage-devel
  libXcomposite-devel libXrender-devel libXext-devel libXfixes-devel libXxf86vm-devel libXres-devel
  libXtst-devel libdrm-devel libliftoff-devel vulkan-loader libxkbcommon-devel libcap-devel SDL2-devel
